@@ -54,10 +54,7 @@ namespace SceneHierarchyTute
             tankObject.AddChild(turretObject); //set the turret object to be a child of the tank object
 
             //set the position of the tank to the centre of the sceen
-            //tankObject.SetPosition(-GetScreenHeight() / 2.0f, GetScreenWidth() / 2.0f);
-            //in the line in the tute was
-            tankObject.SetPosition(GetScreenWidth()/2.0f, GetScreenHeight()/2.0f);
-            //this did not work as the width and height needed to be swaped and the height had to be a negative value
+            tankObject.SetPosition(GetScreenWidth()/2.0f, GetScreenHeight()/2.0f);          
 
         }
 
