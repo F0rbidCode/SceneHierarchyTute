@@ -53,7 +53,7 @@ namespace SceneHierarchyTute
             }
 
             //create a function to multiply a Matrix3 by another Matrix3
-            public static Matrix3 operator *(Matrix3 M1, Matrix3 M2)
+            public static Matrix3 operator *(Matrix3 M2, Matrix3 M1)
             {
                 return new Matrix3(
                     M1.m00 * M2.m00 + M1.m01 * M2.m10 + M1.m02 * M2.m20, M1.m00 * M2.m01 + M1.m01 * M2.m11 + M1.m02 * M2.m21, M1.m00 * M2.m02 + M1.m01 * M2.m12 + M1.m02 * M2.m22,
