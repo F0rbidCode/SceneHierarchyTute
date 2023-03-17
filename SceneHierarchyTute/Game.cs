@@ -42,7 +42,7 @@ namespace SceneHierarchyTute
             lastTime = stopwatch.ElapsedMilliseconds;
 
             //load the tank imiges into the sprites
-            tankSprite.Load("tankBlue_outline.png");
+            tankSprite.Load(@"data\tankBlue_outline.png");
             //rotate the sprite so it faces the right way
             tankSprite.SetRotate(-90 * (float)(Math.PI / 180.0f));
             //set an offset for the base of the tank so that it rotates around the centre
@@ -50,7 +50,7 @@ namespace SceneHierarchyTute
             
 
             //load the image for the tank turret
-            turretSprite.Load("barrelBlue.png");
+            turretSprite.Load(@"data\barrelBlue.png");
             //rotate the sprite so it faces the right way
             turretSprite.SetRotate(-90 * (float)(Math.PI / 180.0f));
             // set the turret offset from the tank base
@@ -151,13 +151,13 @@ namespace SceneHierarchyTute
                 //check if bullet has hit a wall
                 if (bulletSprite.GlobalTransform.m20 < 0 + bulletSprite.Height || bulletSprite.GlobalTransform.m20 > GetScreenWidth() - bulletSprite.Height )
                 {                    
-                    bulletSprite.Load("smokeGrey4.png");//change bullet to smoke
+                    bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
                     shot = false;//set shot to false so gun can be fired again                  
                 }
 
                 if (bulletSprite.GlobalTransform.m21 < 0 + bulletSprite.Height  || bulletSprite.GlobalTransform.m21 > GetScreenHeight() - bulletSprite.Height)
                 {                    
-                    bulletSprite.Load("smokeGrey4.png");//change bullet to smokea
+                    bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
                     shot = false;//set shot to false so gun can be fired again
                 }
                 
@@ -187,7 +187,7 @@ namespace SceneHierarchyTute
         public void Shoot()
         {
             //load the image for the bullet sprite
-            bulletSprite.Load("bulletBlueSilver_outline.png");
+            bulletSprite.Load(@"data\bulletBlueSilver_outline.png");
            //set positions and rotation for bullet sprite
             bulletSprite.SetRotate(90 * (float)(Math.PI / 180.0f));
             bulletSprite.SetPosition(bulletSprite.Height + turretSprite.Height, bulletSprite.Width / 2 - turretSprite.Width);
