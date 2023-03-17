@@ -34,12 +34,13 @@ namespace SceneHierarchyTute
         //create new Scene and Sprite objects for bullet
         SceneObject bulletObject = new SceneObject();
         SpriteObject bulletSprite = new SpriteObject();
-
+       
 
         public void Init()
         {
             stopwatch.Start();
             lastTime = stopwatch.ElapsedMilliseconds;
+
 
             //load the tank imiges into the sprites
             tankSprite.Load(@"data\tankBlue_outline.png");
@@ -82,6 +83,8 @@ namespace SceneHierarchyTute
             deltaTime = (currentTime - lastTime) / 1000.0f;
 
             timer += deltaTime;
+
+            
 
             if(timer >= 1)
             {
