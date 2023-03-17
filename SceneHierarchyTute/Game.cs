@@ -138,13 +138,29 @@ namespace SceneHierarchyTute
 
             //call update on tank object
             tankObject.Update(deltaTime);
+            //check if bullet has been shot
             if (shot)
             {
+                //update bullets position
                 Vector3 facing = new Vector3(
                     bulletObject.LocalTransform.m00,
                     bulletObject.LocalTransform.m01, 1) * deltaTime * 100;
                 bulletObject.Translate(facing.x, facing.y);
                 bulletObject.Update(deltaTime);
+
+                //check if bullet has hit a wall
+                if (bulletSprite.GlobalTransform.m20 < 0 + bulletSprite.Height || bulletSprite.GlobalTransform.m20 > GetScreenWidth() - bulletSprite.Height )
+                {                    
+                    bulletSprite.Load("smokeGrey4.png");//change bullet to smoke
+                    shot = false;//set shot to false so gun can be fired again                  
+                }
+
+                if (bulletSprite.GlobalTransform.m21 < 0 + bulletSprite.Height  || bulletSprite.GlobalTransform.m21 > GetScreenHeight() - bulletSprite.Height)
+                {                    
+                    bulletSprite.Load("smokeGrey4.png");//change bullet to smokea
+                    shot = false;//set shot to false so gun can be fired again
+                }
+                
             }
 
             lastTime = currentTime;
@@ -154,12 +170,16 @@ namespace SceneHierarchyTute
         {
             BeginDrawing();
 
-            ClearBackground(Color.WHITE);
+            ClearBackground(Color.BLACK);
             DrawText(fps.ToString(), 10, 10, 12, Color.RED);
 
             //call to draw the tank object
             tankObject.Draw();
+            
+            //draw bullet
             bulletObject.Draw();
+            
+            
             EndDrawing();
         }
 
