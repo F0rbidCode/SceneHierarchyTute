@@ -170,29 +170,17 @@ namespace SceneHierarchyTute
             bulletSprite.Load("bulletBlueSilver_outline.png");
            //set positions and rotation for bullet sprite
             bulletSprite.SetRotate(90 * (float)(Math.PI / 180.0f));
-            bulletObject.SetPosition(turretObject.GlobalTransform.m20 + turretSprite.Height, turretObject.GlobalTransform.m21 + (-turretSprite.Width / 2.0f));
-           
+            bulletSprite.SetPosition(bulletSprite.Height + turretSprite.Height, bulletSprite.Width / 2 - turretSprite.Width);
+             
 
-            
-
-
-            turretObject.RemoveChild(bulletObject);
-
-
-
-
-            //turretObject.AddChild(bulletSprite);a
-
-
-            //bulletSprite.SetPosition(turretSprite.Width / 2.0f, turretSprite.Height);
-
-            //turretObject.RemoveChild(bulletSprite);
-
-            //attach sprite object to scene object hirachy
-            //bulletObject.AddChild(bulletSprite);
-            //turretSprite.AddChild(bulletSprite);
-
-
+            //create a variable to store rotation of turret
+            float rad = (float)Math.Atan2(turretObject.GlobalTransform.m01, turretObject.GlobalTransform.m11);
+            //set rotation of bullet object to be the same as turret
+            bulletObject.SetRotate(rad);
+            //set the location of the bullet spawn
+            bulletObject.SetPosition(turretObject.GlobalTransform.m20, turretObject.GlobalTransform.m21);
+            //+turretSprite.Height
+            //+(-turretSprite.Width / 2.0f)
 
         }
     }
