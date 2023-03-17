@@ -15,6 +15,9 @@
     <None Update="barrelBlue.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="bulletBlueSilver_outline.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="tankBlue_outline.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
