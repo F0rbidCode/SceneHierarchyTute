@@ -23,6 +23,10 @@ namespace SceneHierarchyTute
 
         //create a variable to know if shot has occurd
         bool shot = false;
+        
+
+        
+       
 
         //create new scene and sprite objects for tank body and tank turret
         SceneObject tankObject = new SceneObject();
@@ -134,6 +138,9 @@ namespace SceneHierarchyTute
                 if (!shot)
                 {
                     Shoot();
+                    
+                    
+
                     shot = true;
                 }
                
@@ -153,13 +160,23 @@ namespace SceneHierarchyTute
 
                 //check if bullet has hit a wall
                 if (bulletSprite.GlobalTransform.m20 < 0 + bulletSprite.Height || bulletSprite.GlobalTransform.m20 > GetScreenWidth() - bulletSprite.Height )
-                {                    
+                {    
+                    //load sounds
+                    Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
+                    //play sound
+                    PlaySound(ExplodeFX);
+
                     bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
                     shot = false;//set shot to false so gun can be fired again                  
                 }
 
                 if (bulletSprite.GlobalTransform.m21 < 0 + bulletSprite.Height  || bulletSprite.GlobalTransform.m21 > GetScreenHeight() - bulletSprite.Height)
-                {                    
+                {
+                    //load sounds
+                    Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
+                    //play sound
+                    PlaySound(ExplodeFX);
+
                     bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
                     shot = false;//set shot to false so gun can be fired again
                 }
@@ -202,8 +219,11 @@ namespace SceneHierarchyTute
             bulletObject.SetRotate(rad);
             //set the location of the bullet spawn
             bulletObject.SetPosition(turretObject.GlobalTransform.m20, turretObject.GlobalTransform.m21);
-            //+turretSprite.Height
-            //+(-turretSprite.Width / 2.0f)
+            
+            //load sounds
+            Sound shootFX = LoadSound(@"data\mixkit-empty-tube-hit-3197.wav");
+            //play sound
+            PlaySound(shootFX);
 
         }
     }

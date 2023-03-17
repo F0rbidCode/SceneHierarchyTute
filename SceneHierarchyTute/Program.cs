@@ -22,6 +22,11 @@ namespace SceneHierarchyTute
             Music music = LoadMusicStream(@"data\Casual Arcade Track #3 (looped).wav");
             //play the music
             PlayMusicStream(music);
+            SetMusicVolume(music, 0.25f);
+
+            
+
+
 
 
             game.Init();
@@ -29,9 +34,13 @@ namespace SceneHierarchyTute
             while (!Raylib.WindowShouldClose())
             {
                 //update music stream
-                UpdateMusicStream(music);
+                UpdateMusicStream(music);              
+               
+
                 game.Update();
                 game.Draw();
+
+
             }
 
             game.Shutdown();
