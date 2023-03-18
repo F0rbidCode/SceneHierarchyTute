@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /y &quot;$(ProjectDir)tankBlue_outline.png&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)smokeGrey4.png&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)bulletBlueSilver_outline.png&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)barrelBlue.png&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)Casual Arcade Track #3 (looped).wav&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)mixkit-arcade-game-explosion-2759.wav&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)mixkit-empty-tube-hit-3197.wav&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;" />
+    <Exec Command="xcopy /y &quot;$(ProjectDir)tankBlue_outline.png&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)smokeGrey4.png&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)bulletBlueSilver_outline.png&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)barrelBlue.png&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)Casual Arcade Track #3 (looped).wav&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)mixkit-arcade-game-explosion-2759.wav&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)mixkit-empty-tube-hit-3197.wav&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)treeGreen_large.png&quot; &quot;$(ProjectDir)$(OutDir)data\&quot;" />
   </Target>
 
   
