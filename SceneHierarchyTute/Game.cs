@@ -27,6 +27,8 @@ namespace SceneHierarchyTute
         //create a variable to know if shot has occurd
         bool shot = false;
 
+        private int moveDelay = 0;
+
 
         
 
@@ -107,6 +109,16 @@ namespace SceneHierarchyTute
 
             timer += deltaTime;
 
+            //increment move delay by 1 every updte if it does not = 0
+            if (moveDelay != 0)
+            {
+                moveDelay++;
+                if (moveDelay > 60)
+                {
+                    moveDelay = 0;
+                }
+            }
+
             
 
             if(timer >= 1)
@@ -116,6 +128,19 @@ namespace SceneHierarchyTute
                 timer -= 1;
             }
             frames++;
+
+            ////check if tank has collided with a wall
+            //if (tankSprite.GlobalTransform.m20 + (tankSprite.Width / 2.0f) >= treeSprite.GlobalTransform.m20 && tankSprite.GlobalTransform.m20 - (tankSprite.Width / 2.0f) <= treeSprite.GlobalTransform.m20 + (treeSprite.Width))
+            //{
+            //    if (tankSprite.GlobalTransform.m21 + (tankSprite.Width / 2.0f) >= treeSprite.GlobalTransform.m21 && tankSprite.GlobalTransform.m21 - (tankSprite.Width / 2.0f) <= treeSprite.GlobalTransform.m21 + (treeSprite.Height))
+            //    {
+            //        Vector3 facing = new Vector3(
+            //     tankObject.LocalTransform.m00,
+            //     tankObject.LocalTransform.m01, 1) * deltaTime * -100;
+            //        tankObject.Translate(facing.x, facing.y);
+
+            //    }                
+            //}
 
             //get user input to move the tank
             if (IsKeyDown(KeyboardKey.KEY_A))
@@ -128,10 +153,38 @@ namespace SceneHierarchyTute
             }
             if(IsKeyDown(KeyboardKey.KEY_W))
             {
-                Vector3 facing = new Vector3(
-                    tankObject.LocalTransform.m00,
-                    tankObject.LocalTransform.m01, 1) * deltaTime * 100;
-                tankObject.Translate(facing.x, facing.y);
+                if (moveDelay == 0)
+                {
+                    if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= treeSprite.GlobalTransform.m20 && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= treeSprite.GlobalTransform.m20 + (treeSprite.Width))
+                    {
+                        if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= treeSprite.GlobalTransform.m21 && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= treeSprite.GlobalTransform.m21 + (treeSprite.Height))
+                        {
+                            Vector3 facing = new Vector3(
+                         tankObject.LocalTransform.m00,
+                         tankObject.LocalTransform.m01, 1) * deltaTime * -2000;
+                            tankObject.Translate(facing.x, facing.y);
+
+                            moveDelay = 1;
+
+
+                        }
+                        else
+                        {
+                            Vector3 facing = new Vector3(
+                     tankObject.LocalTransform.m00,
+                     tankObject.LocalTransform.m01, 1) * deltaTime * 100;
+                            tankObject.Translate(facing.x, facing.y);
+                        }
+                    }
+                    else
+                    {
+                        Vector3 facing = new Vector3(
+                      tankObject.LocalTransform.m00,
+                      tankObject.LocalTransform.m01, 1) * deltaTime * 100;
+                        tankObject.Translate(facing.x, facing.y);
+                    }
+                }
+                      
             }
             if(IsKeyDown(KeyboardKey.KEY_S))
             {
