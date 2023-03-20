@@ -26,6 +26,7 @@ namespace SceneHierarchyTute
 
         //create a variable to know if shot has occurd
         bool shot = false;
+        private int smokeTimer = 0;
 
         private int moveDelay = 0;       
 
@@ -51,6 +52,10 @@ namespace SceneHierarchyTute
         //create new Scene and sprite objects for the trees
         SceneObject treeObject = new SceneObject();
         SpriteObject treeSprite = new SpriteObject();
+
+        //create scene and sprite objects for smoke
+        SceneObject smokeObject = new SceneObject();
+        SpriteObject smokeSprite = new SpriteObject();
        
 
         public void Init()
@@ -216,6 +221,8 @@ namespace SceneHierarchyTute
             
             treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
 
+            smokeObject.AddChild(smokeSprite);//set the smoke sprite as a child of smoke object
+
 
             //set the position of the tank to the centre of the sceen
             tankObject.SetPosition((treeSprite.Width + tankSprite.Width), GetScreenHeight() - (treeSprite.Width + tankSprite.Width));
@@ -244,6 +251,11 @@ namespace SceneHierarchyTute
                 {
                     moveDelay = 0;
                 }
+            }
+
+            if (smokeTimer != 0)
+            {
+                smokeTimer++;
             }
 
             
@@ -402,7 +414,11 @@ namespace SceneHierarchyTute
                     //play sound
                     PlaySound(ExplodeFX);
 
-                    bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
+                    smokeSprite.SetPosition(-smokeSprite.Width / 2.0f, -smokeSprite.Height / 2.0f);
+                    smokeObject.SetPosition(bulletSprite.GlobalTransform.m20, bulletSprite.GlobalTransform.m21);
+                    smokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
+                    //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                    smokeTimer = 1;
                     shot = false;//set shot to false so gun can be fired again                  
                 }
 
@@ -413,7 +429,11 @@ namespace SceneHierarchyTute
                     //play sound
                     PlaySound(ExplodeFX);
 
-                    bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                    smokeSprite.SetPosition(-smokeSprite.Width / 2.0f, -smokeSprite.Height / 2.0f);
+                    smokeObject.SetPosition(bulletSprite.GlobalTransform.m20, bulletSprite.GlobalTransform.m21);
+                    smokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
+                    //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                    smokeTimer = 1;
                     shot = false;//set shot to false so gun can be fired again
                 }
 
@@ -429,7 +449,11 @@ namespace SceneHierarchyTute
                             //play sound
                             PlaySound(ExplodeFX);
 
-                            bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                            smokeSprite.SetPosition(-smokeSprite.Width / 2.0f, -smokeSprite.Height / 2.0f);
+                            smokeObject.SetPosition(bulletSprite.GlobalTransform.m20, bulletSprite.GlobalTransform.m21);
+                            smokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
+                            //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                            smokeTimer = 1;
                             shot = false;//set shot to false so gun can be fired again
 
                             wallList[i].SetPosition(-1000, -1000);
@@ -471,8 +495,24 @@ namespace SceneHierarchyTute
             //call to draw the tank object
             tankObject.Draw();
             
-            //draw bullet
-            bulletObject.Draw();
+            //check if shot has been fired
+            if (shot)
+            {
+                //draw bullet
+                bulletObject.Draw();
+            }
+
+            if (smokeTimer > 0)
+            {
+                smokeTimer++;
+                smokeObject.Draw();
+
+                if (smokeTimer > 60)
+                {
+                    smokeTimer = 0;
+                }
+            }
+            
 
             int i2 = 0;
             //draw tree walls
