@@ -73,130 +73,139 @@ namespace SceneHierarchyTute
             turretSprite.SetRotate(-90 * (float)(Math.PI / 180.0f));
             // set the turret offset from the tank base
             turretSprite.SetPosition(0, turretSprite.Width / 2.0f);
-            
-            //loop through to fill out the top row of wall
-            for (int i = 0; lastX < GetScreenWidth(); i++)
+
+            //////////////////////////////////////////////////////////////////
+            //////TREE WALLS!!!!!!!!!!!
+            //////////////////////////////////////////////////////////////////
             {
-                //create new Scene and sprite objects for the trees
-                SceneObject treeObject = new SceneObject();
-                SpriteObject treeSprite = new SpriteObject();             
-                
-                //load the image for the tree
-                treeSprite.Load(@"data\treeGreen_small.png");
 
-                //set the sprite offset to be in the centre of the tree object                
-                treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
-
-                treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
-                if (i == 0)
+                //loop through to fill out the top row of wall
+                for (int i = 0; lastX < GetScreenWidth(); i++)
                 {
-                    treeObject.SetPosition(0 + (treeSprite.Width / 2.0f), 0 + (treeSprite.Height / 2.0f));
+                    //create new Scene and sprite objects for the trees
+                    SceneObject treeObject = new SceneObject();
+                    SpriteObject treeSprite = new SpriteObject();
+
+                    //load the image for the tree
+                    treeSprite.Load(@"data\treeGreen_small.png");
+
+                    //set the sprite offset to be in the centre of the tree object                
+                    treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                    treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+                    if (i == 0)
+                    {
+                        treeObject.SetPosition(0 + (treeSprite.Width / 2.0f), 0 + (treeSprite.Height / 2.0f));
+                    }
+                    else
+                    {
+                        treeObject.SetPosition(lastX + (treeSprite.Width), lastY + (treeSprite.Height / 2.0f));
+                    }
+
+
+                    lastX = treeObject.GlobalTransform.m20;
+
+                    wallList.Add(treeObject);
                 }
-                else
+
+                //loop through to fill out the Right row of wall
+                for (int i = 0; lastY < GetScreenHeight(); i++)
                 {
-                    treeObject.SetPosition(lastX + (treeSprite.Width), lastY + (treeSprite.Height / 2.0f));
+                    //create new Scene and sprite objects for the trees
+                    SceneObject treeObject = new SceneObject();
+                    SpriteObject treeSprite = new SpriteObject();
+
+                    //load the image for the tree
+                    treeSprite.Load(@"data\treeGreen_small.png");
+
+                    //set the sprite offset to be in the centre of the tree object                
+                    treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                    treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+
+                    if (i == 0)
+                    {
+                        treeObject.SetPosition(lastX - treeSprite.Width, lastY + (treeSprite.Height * 1.5f));
+                    }
+                    else
+                    {
+                        treeObject.SetPosition(lastX - treeSprite.Width, lastY + treeSprite.Height);
+                    }
+                    lastY = treeObject.GlobalTransform.m21;
+
+                    wallList.Add(treeObject);
                 }
 
-
-                lastX = treeObject.GlobalTransform.m20;
-
-                wallList.Add(treeObject);
-            }
-
-            //loop through to fill out the Right row of wall
-            for (int i = 0; lastY < GetScreenHeight(); i++)
-            {
-                //create new Scene and sprite objects for the trees
-                SceneObject treeObject = new SceneObject();
-                SpriteObject treeSprite = new SpriteObject();
-
-                //load the image for the tree
-                treeSprite.Load(@"data\treeGreen_small.png");
-
-                //set the sprite offset to be in the centre of the tree object                
-                treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
-
-                treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
-
-                if (i == 0)
+                //loop through to fill out the bottom row of wall
+                for (int i = 0; lastX > 0; i++)
                 {
-                    treeObject.SetPosition(lastX - treeSprite.Width, lastY + (treeSprite.Height * 1.5f));
-                }
-                else
-                {
-                    treeObject.SetPosition(lastX - treeSprite.Width, lastY + treeSprite.Height);
-                }
-                lastY = treeObject.GlobalTransform.m21;
+                    //create new Scene and sprite objects for the trees
+                    SceneObject treeObject = new SceneObject();
+                    SpriteObject treeSprite = new SpriteObject();
 
-                wallList.Add(treeObject);
-            }
+                    //load the image for the tree
+                    treeSprite.Load(@"data\treeGreen_small.png");
 
-            //loop through to fill out the bottom row of wall
-            for (int i = 0; lastX > 0; i++)
-            {
-                //create new Scene and sprite objects for the trees
-                SceneObject treeObject = new SceneObject();
-                SpriteObject treeSprite = new SpriteObject();
+                    //set the sprite offset to be in the centre of the tree object                
+                    treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
 
-                //load the image for the tree
-                treeSprite.Load(@"data\treeGreen_small.png");
+                    treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
 
-                //set the sprite offset to be in the centre of the tree object                
-                treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
 
-                treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
-               
-               
                     treeObject.SetPosition(lastX - (treeSprite.Width), lastY - treeSprite.Height);
-                
 
 
-                lastX = treeObject.GlobalTransform.m20;
 
-                wallList.Add(treeObject);
-            }
+                    lastX = treeObject.GlobalTransform.m20;
 
-            //loop through to fill out the Left row of wall
-            for (int i = 0; lastY > 0 + treeSprite.Height; i++)
-            {
-                //create new Scene and sprite objects for the trees
-                SceneObject treeObject = new SceneObject();
-                SpriteObject treeSprite = new SpriteObject();
+                    wallList.Add(treeObject);
+                }
 
-                //load the image for the tree
-                treeSprite.Load(@"data\treeGreen_small.png");
+                //loop through to fill out the Left row of wall
+                for (int i = 0; lastY > 0 + treeSprite.Height; i++)
+                {
+                    //create new Scene and sprite objects for the trees
+                    SceneObject treeObject = new SceneObject();
+                    SpriteObject treeSprite = new SpriteObject();
 
-                //set the sprite offset to be in the centre of the tree object                
-                treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+                    //load the image for the tree
+                    treeSprite.Load(@"data\treeGreen_small.png");
 
-                treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+                    //set the sprite offset to be in the centre of the tree object                
+                    treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
 
-                
-               
+                    treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+
+
+
                     treeObject.SetPosition(lastX + treeSprite.Width, lastY - treeSprite.Height);
-                
-                lastY = treeObject.GlobalTransform.m21;
 
-                wallList.Add(treeObject);
+                    lastY = treeObject.GlobalTransform.m21;
+
+                    wallList.Add(treeObject);
+                }
+
+                
+
+                /////////////////////////////////////////////////////
+                ////CURENTLY NEEDED FOR TREE COLLISIONS TO WORK!!!!!!
+                /////////////////////////////////////////////////////
+                ///// test tree
+                /////////////////////////////////////////////////////
+                /////
+                ////load the image for the tree
+                treeSprite.Load(@"data\treeGreen_small.png");
+                ////set the sprite offset to be in the centre of the tree object
+                treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+                ////set the position of the tree
+                treeObject.SetPosition(0 + (treeSprite.Width / 2.0f), 0 + (treeSprite.Height / 2.0f));
+                treeObject.SetPosition(1000 + (treeSprite.Width / 2.0f), 500 + (treeSprite.Height / 2.0f));
+
             }
 
-
-
-            /////////////////////////////////////////////////////
-            ////CURENTLY NEEDED FOR TREE COLLISIONS TO WORK!!!!!!
-            /////////////////////////////////////////////////////
-            ///// test tree
-            /////////////////////////////////////////////////////
-            /////
-            ////load the image for the tree
-            treeSprite.Load(@"data\treeGreen_small.png");
-            ////set the sprite offset to be in the centre of the tree object
-            treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
-            ////set the position of the tree
-            treeObject.SetPosition(0 + (treeSprite.Width / 2.0f), 0 + (treeSprite.Height / 2.0f));
-            treeObject.SetPosition(1000 + (treeSprite.Width / 2.0f), 500 + (treeSprite.Height / 2.0f));
-
-
+            //////////////////////////////////////////////////////////////////
+            ///////END WALLS
+            //////////////////////////////////////////////////////////////////
 
             //set the scene object hierarchy
             turretObject.AddChild(turretSprite); //set the turret sprite to be a child of the turret object
@@ -209,9 +218,10 @@ namespace SceneHierarchyTute
 
 
             //set the position of the tank to the centre of the sceen
-            tankObject.SetPosition(GetScreenWidth()/2.0f, GetScreenHeight()/2.0f);
+            tankObject.SetPosition((treeSprite.Width + tankSprite.Width), GetScreenHeight() - (treeSprite.Width + tankSprite.Width));
+            tankObject.Rotate(-90 * (float)(Math.PI / 180.0f));
 
-            
+
         }
 
         public void Shutdown()
