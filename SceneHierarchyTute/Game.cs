@@ -27,11 +27,14 @@ namespace SceneHierarchyTute
         //create a variable to know if shot has occurd
         bool shot = false;
 
-        private int moveDelay = 0;
+        private int moveDelay = 0;       
 
 
-        
-
+        //Create a list to store the treeObjects that are used to make the walls
+        List<SceneObject> wallList = new List<SceneObject>();
+        //create a vatiable to store the last created x and y positions
+        float lastX = 0;
+        float lastY = 0;
         
 
         //create new scene and sprite objects for tank body and tank turret
@@ -70,12 +73,129 @@ namespace SceneHierarchyTute
             turretSprite.SetRotate(-90 * (float)(Math.PI / 180.0f));
             // set the turret offset from the tank base
             turretSprite.SetPosition(0, turretSprite.Width / 2.0f);
+            
+            //loop through to fill out the top row of wall
+            for (int i = 0; lastX < GetScreenWidth(); i++)
+            {
+                //create new Scene and sprite objects for the trees
+                SceneObject treeObject = new SceneObject();
+                SpriteObject treeSprite = new SpriteObject();             
+                
+                //load the image for the tree
+                treeSprite.Load(@"data\treeGreen_small.png");
+
+                //set the sprite offset to be in the centre of the tree object                
+                treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+                if (i == 0)
+                {
+                    treeObject.SetPosition(0 + (treeSprite.Width / 2.0f), 0 + (treeSprite.Height / 2.0f));
+                }
+                else
+                {
+                    treeObject.SetPosition(lastX + (treeSprite.Width), lastY + (treeSprite.Height / 2.0f));
+                }
 
 
-            //load the image for the tree
-            treeSprite.Load(@"data\treeGreen_large.png");
-            //set the sprite offset to be in the centre of the tree object
+                lastX = treeObject.GlobalTransform.m20;
+
+                wallList.Add(treeObject);
+            }
+
+            //loop through to fill out the Right row of wall
+            for (int i = 0; lastY < GetScreenHeight(); i++)
+            {
+                //create new Scene and sprite objects for the trees
+                SceneObject treeObject = new SceneObject();
+                SpriteObject treeSprite = new SpriteObject();
+
+                //load the image for the tree
+                treeSprite.Load(@"data\treeGreen_small.png");
+
+                //set the sprite offset to be in the centre of the tree object                
+                treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+
+                if (i == 0)
+                {
+                    treeObject.SetPosition(lastX - treeSprite.Width, lastY + (treeSprite.Height * 1.5f));
+                }
+                else
+                {
+                    treeObject.SetPosition(lastX - treeSprite.Width, lastY + treeSprite.Height);
+                }
+                lastY = treeObject.GlobalTransform.m21;
+
+                wallList.Add(treeObject);
+            }
+
+            //loop through to fill out the bottom row of wall
+            for (int i = 0; lastX > 0; i++)
+            {
+                //create new Scene and sprite objects for the trees
+                SceneObject treeObject = new SceneObject();
+                SpriteObject treeSprite = new SpriteObject();
+
+                //load the image for the tree
+                treeSprite.Load(@"data\treeGreen_small.png");
+
+                //set the sprite offset to be in the centre of the tree object                
+                treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+               
+               
+                    treeObject.SetPosition(lastX - (treeSprite.Width), lastY - treeSprite.Height);
+                
+
+
+                lastX = treeObject.GlobalTransform.m20;
+
+                wallList.Add(treeObject);
+            }
+
+            //loop through to fill out the Left row of wall
+            for (int i = 0; lastY > 0 + treeSprite.Height; i++)
+            {
+                //create new Scene and sprite objects for the trees
+                SceneObject treeObject = new SceneObject();
+                SpriteObject treeSprite = new SpriteObject();
+
+                //load the image for the tree
+                treeSprite.Load(@"data\treeGreen_small.png");
+
+                //set the sprite offset to be in the centre of the tree object                
+                treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+
+                
+               
+                    treeObject.SetPosition(lastX + treeSprite.Width, lastY - treeSprite.Height);
+                
+                lastY = treeObject.GlobalTransform.m21;
+
+                wallList.Add(treeObject);
+            }
+
+
+
+            /////////////////////////////////////////////////////
+            ////CURENTLY NEEDED FOR TREE COLLISIONS TO WORK!!!!!!
+            /////////////////////////////////////////////////////
+            ///// test tree
+            /////////////////////////////////////////////////////
+            /////
+            ////load the image for the tree
+            treeSprite.Load(@"data\treeGreen_small.png");
+            ////set the sprite offset to be in the centre of the tree object
             treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+            ////set the position of the tree
+            treeObject.SetPosition(0 + (treeSprite.Width / 2.0f), 0 + (treeSprite.Height / 2.0f));
+            treeObject.SetPosition(1000 + (treeSprite.Width / 2.0f), 500 + (treeSprite.Height / 2.0f));
+
 
 
             //set the scene object hierarchy
@@ -91,10 +211,7 @@ namespace SceneHierarchyTute
             //set the position of the tank to the centre of the sceen
             tankObject.SetPosition(GetScreenWidth()/2.0f, GetScreenHeight()/2.0f);
 
-            //set the position of the tree
-            //treeObject.SetPosition(0 + (treeSprite.Width / 2.0f), 0 + (treeSprite.Height / 2.0f));
-            treeObject.SetPosition(1000 + (treeSprite.Width / 2.0f), 500 + (treeSprite.Height / 2.0f));
-
+            
         }
 
         public void Shutdown()
@@ -129,18 +246,7 @@ namespace SceneHierarchyTute
             }
             frames++;
 
-            ////check if tank has collided with a wall
-            //if (tankSprite.GlobalTransform.m20 + (tankSprite.Width / 2.0f) >= treeSprite.GlobalTransform.m20 && tankSprite.GlobalTransform.m20 - (tankSprite.Width / 2.0f) <= treeSprite.GlobalTransform.m20 + (treeSprite.Width))
-            //{
-            //    if (tankSprite.GlobalTransform.m21 + (tankSprite.Width / 2.0f) >= treeSprite.GlobalTransform.m21 && tankSprite.GlobalTransform.m21 - (tankSprite.Width / 2.0f) <= treeSprite.GlobalTransform.m21 + (treeSprite.Height))
-            //    {
-            //        Vector3 facing = new Vector3(
-            //     tankObject.LocalTransform.m00,
-            //     tankObject.LocalTransform.m01, 1) * deltaTime * -100;
-            //        tankObject.Translate(facing.x, facing.y);
-
-            //    }                
-            //}
+            
 
             //get user input to move the tank
             if (IsKeyDown(KeyboardKey.KEY_A))
@@ -153,45 +259,84 @@ namespace SceneHierarchyTute
             }
             if(IsKeyDown(KeyboardKey.KEY_W))
             {
+                //stop the tank from moving if recently ran into wall
                 if (moveDelay == 0)
                 {
-                    if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= treeSprite.GlobalTransform.m20 && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= treeSprite.GlobalTransform.m20 + (treeSprite.Width))
-                    {
-                        if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= treeSprite.GlobalTransform.m21 && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= treeSprite.GlobalTransform.m21 + (treeSprite.Height))
-                        {
-                            Vector3 facing = new Vector3(
-                         tankObject.LocalTransform.m00,
-                         tankObject.LocalTransform.m01, 1) * deltaTime * -2000;
-                            tankObject.Translate(facing.x, facing.y);
-
-                            moveDelay = 1;
-
-
-                        }
-                        else
-                        {
-                            Vector3 facing = new Vector3(
+                    Vector3 facing = new Vector3(
                      tankObject.LocalTransform.m00,
                      tankObject.LocalTransform.m01, 1) * deltaTime * 100;
-                            tankObject.Translate(facing.x, facing.y);
-                        }
-                    }
-                    else
+                    tankObject.Translate(facing.x, facing.y);
+
+                    //cycle through the wall list to check if tank colides with wall
+                    int i3 = 0;
+                    foreach (SceneObject treeObject in wallList)
                     {
-                        Vector3 facing = new Vector3(
-                      tankObject.LocalTransform.m00,
-                      tankObject.LocalTransform.m01, 1) * deltaTime * 100;
-                        tankObject.Translate(facing.x, facing.y);
+                        if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
+                        {
+                            if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                            {
+                                facing = new Vector3(
+                             tankObject.LocalTransform.m00,
+                             tankObject.LocalTransform.m01, 1) * deltaTime * -2000;
+                                tankObject.Translate(facing.x, facing.y);
+
+                                moveDelay = 1;//start move delay counter
+
+
+                            }
+                        }
+                        //    else
+                        //    {
+                        //        Vector3 facing = new Vector3(
+                        // tankObject.LocalTransform.m00,
+                        // tankObject.LocalTransform.m01, 1) * deltaTime * 100;
+                        //        tankObject.Translate(facing.x, facing.y);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    Vector3 facing = new Vector3(
+                        //  tankObject.LocalTransform.m00,
+                        //  tankObject.LocalTransform.m01, 1) * deltaTime * 100;
+                        //    tankObject.Translate(facing.x, facing.y);
+                        //}
+                        i3++;
                     }
                 }
                       
             }
             if(IsKeyDown(KeyboardKey.KEY_S))
             {
-                Vector3 facing = new Vector3(
+                //stop the tank from moving if recently ran into wall
+                if (moveDelay == 0)
+                {
+                    Vector3 facing = new Vector3(
                     tankObject.LocalTransform.m00,
                     tankObject.LocalTransform.m01, 1) * deltaTime * -100;
-                tankObject.Translate(facing.x, facing.y);
+                    tankObject.Translate(facing.x, facing.y);
+
+                    //cycle through the wall list to check if tank colides with wall
+                    int i3 = 0;
+                    foreach (SceneObject treeObject in wallList)
+                    {
+                        if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m20 - (treeSprite.Width /2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
+                        {
+                            if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                            {
+                                facing = new Vector3(
+                             tankObject.LocalTransform.m00,
+                             tankObject.LocalTransform.m01, 1) * deltaTime * 2000;
+                                tankObject.Translate(facing.x, facing.y);
+
+                                moveDelay = 1;//start move delay counter
+
+
+                            }
+                        }
+                        i3++;
+                    }
+                }
+                
             }
 
             //get user input to move the turret
@@ -221,6 +366,13 @@ namespace SceneHierarchyTute
             //call update on tank object
             tankObject.Update(deltaTime);
             treeObject.Update(deltaTime);
+
+            //call update on tree walls
+            foreach (SceneObject treeObject in wallList)
+            {
+                //draw tree
+                treeObject.Update(deltaTime);
+            }
 
             //check if bullet has been shot
             if (shot)
@@ -254,23 +406,46 @@ namespace SceneHierarchyTute
                     bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
                     shot = false;//set shot to false so gun can be fired again
                 }
-                
-                  if (bulletSprite.GlobalTransform.m20 >= treeSprite.GlobalTransform.m20  && bulletSprite.GlobalTransform.m20 <= treeSprite.GlobalTransform.m20 + (treeSprite.Width))
-                {
-                    if (bulletSprite.GlobalTransform.m21 >= treeSprite.GlobalTransform.m21 && bulletSprite.GlobalTransform.m21 <= treeSprite.GlobalTransform.m21 + (treeSprite.Height))
+
+                int i = 0;
+                foreach (SceneObject treeObject in wallList)
+                {                    
+                    if (bulletSprite.GlobalTransform.m20 >= wallList[i].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && bulletSprite.GlobalTransform.m20 <= wallList[i].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
                     {
-                        //load sounds
-                        Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
-                        //play sound
-                        PlaySound(ExplodeFX);
+                        if (bulletSprite.GlobalTransform.m21 >= wallList[i].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && bulletSprite.GlobalTransform.m21 <= wallList[i].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                        {
+                            //load sounds
+                            Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
+                            //play sound
+                            PlaySound(ExplodeFX);
 
-                        bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
-                        shot = false;//set shot to false so gun can be fired again
+                            bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                            shot = false;//set shot to false so gun can be fired again
 
-                        treeObject.SetPosition(-1000, -1000);
+                            wallList[i].SetPosition(-1000, -1000);
+                            //treeObject.SetPosition(-1000, -1000);
+                        }
+
                     }
-
+                    i++;
                 }
+
+                //    if (bulletSprite.GlobalTransform.m20 >= treeSprite.GlobalTransform.m20  && bulletSprite.GlobalTransform.m20 <= treeSprite.GlobalTransform.m20 + (treeSprite.Width))
+                //{
+                //    if (bulletSprite.GlobalTransform.m21 >= treeSprite.GlobalTransform.m21 && bulletSprite.GlobalTransform.m21 <= treeSprite.GlobalTransform.m21 + (treeSprite.Height))
+                //    {
+                //        //load sounds
+                //        Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
+                //        //play sound
+                //        PlaySound(ExplodeFX);
+
+                //        bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                //        shot = false;//set shot to false so gun can be fired again
+
+                //        treeObject.SetPosition(-1000, -1000);
+                //    }
+
+                //}
             }
 
             lastTime = currentTime;
@@ -289,13 +464,19 @@ namespace SceneHierarchyTute
             //draw bullet
             bulletObject.Draw();
 
-
-            //dont draw tree if object is of screen
-            if (treeObject.GlobalTransform.m20 > 0)
+            int i2 = 0;
+            //draw tree walls
+            foreach (SceneObject treeObject in wallList)
             {
-                //draw tree
-                treeObject.Draw();
-            }           
+                //dont draw tree if object is of screen
+                if (wallList[i2].GlobalTransform.m20 > 0)
+                {
+                    //draw tree
+                    wallList[i2].Draw();
+                }
+                i2++;
+            }
+            
             
             
             EndDrawing();
