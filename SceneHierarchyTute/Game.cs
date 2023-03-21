@@ -190,7 +190,52 @@ namespace SceneHierarchyTute
                     wallList.Add(treeObject);
                 }
 
-                
+                ///////////////////////////////////////////////////
+                ///Fil in the maze
+                ///////////////////////////////////////////////////
+
+                /// first row from left
+                //loop through to fill out the Left row of maze
+                lastY = 0;
+                lastX = 0;
+                for (int j = 0; lastX < GetScreenWidth() - tankSprite.Width * 3; j++)
+                {
+                    if (j != 0)
+                    {
+                        lastX = lastX + (tankSprite.Width * 4) + treeSprite.Width;
+                    }
+
+                    for (int i = 0; lastY < GetScreenHeight() - (tankSprite.Height * 2); i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+
+                        //on the first loop
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(lastX+ (tankSprite.Width + (treeSprite.Width * 2.0f)), 0 + (treeSprite.Height * 3.5f));
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(lastX + (tankSprite.Width + (treeSprite.Width * 2.0f)), lastY + treeSprite.Height);
+                        }
+
+
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        wallList.Add(treeObject);
+                    }
+                    lastY = 0;
+                }
 
                 /////////////////////////////////////////////////////
                 ////CURENTLY NEEDED FOR TREE COLLISIONS TO WORK!!!!!!
@@ -225,7 +270,7 @@ namespace SceneHierarchyTute
 
 
             //set the position of the tank to the centre of the sceen
-            tankObject.SetPosition((treeSprite.Width + tankSprite.Width), GetScreenHeight() - (treeSprite.Width + tankSprite.Width));
+            tankObject.SetPosition((treeSprite.Width + (tankSprite.Width / 1.5f)), GetScreenHeight() - (treeSprite.Width + tankSprite.Width));
             tankObject.Rotate(-90 * (float)(Math.PI / 180.0f));
 
 
