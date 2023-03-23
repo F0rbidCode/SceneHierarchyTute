@@ -28,7 +28,10 @@ namespace SceneHierarchyTute
         bool shot = false;
         private int smokeTimer = 0;
 
-        private int moveDelay = 0;       
+        private int moveDelay = 0;
+
+        //create a variable to set at the end of the level
+        private bool end = false;
 
 
         //Create a list to store the treeObjects that are used to make the walls
@@ -56,6 +59,10 @@ namespace SceneHierarchyTute
         //create scene and sprite objects for smoke
         SceneObject smokeObject = new SceneObject();
         SpriteObject smokeSprite = new SpriteObject();
+
+        //create the scene and sprite objects for the end point
+        SceneObject endObject = new SceneObject();
+        SpriteObject endSprite = new SpriteObject();
        
 
         public void Init()
@@ -78,6 +85,11 @@ namespace SceneHierarchyTute
             turretSprite.SetRotate(-90 * (float)(Math.PI / 180.0f));
             // set the turret offset from the tank base
             turretSprite.SetPosition(0, turretSprite.Width / 2.0f);
+
+            //load the image for the end
+            endSprite.Load(@"data\explosion1.png");
+            //set the offset to be centred
+            endSprite.SetPosition(-endSprite.Width / 2.0f, -endSprite.Height / 2.0f);
 
             //////////////////////////////////////////////////////////////////
             //////TREE WALLS!!!!!!!!!!!
@@ -194,17 +206,17 @@ namespace SceneHierarchyTute
                 ///Fil in the maze
                 ///////////////////////////////////////////////////
 
-                /// first row from left
-                //loop through to fill out the Left row of maze
+                /// Rows starting from bottom of screen                
                 lastY = 0;
                 lastX = 0;
-                for (int j = 0; lastX < GetScreenWidth() - tankSprite.Width * 3; j++)
+                for (int j = 0; lastX  < GetScreenWidth() - (tankSprite.Height * 8); j++)
                 {
                     if (j != 0)
                     {
                         lastX = lastX + (tankSprite.Width * 4) + treeSprite.Width;
                     }
 
+                    
                     for (int i = 0; lastY < GetScreenHeight() - (tankSprite.Height * 2); i++)
                     {
                         //create new Scene and sprite objects for the trees
@@ -234,7 +246,56 @@ namespace SceneHierarchyTute
 
                         wallList.Add(treeObject);
                     }
+
+                    //reset lastY to 0
+                    lastY = 0;                 
+                    
+                }
+
+                /// Rows starting from top of screen     
+                lastY = 0;
+                lastX = 0;
+                for (int j = 0; lastX < GetScreenWidth() - (tankSprite.Height * 4); j++)
+                {
+                    if (j != 0)
+                    {
+                        lastX = lastX + (tankSprite.Width * 4) + treeSprite.Width;
+                    }
+
+
+                    for (int i = 0; lastY < GetScreenHeight() - (tankSprite.Height * 4); i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+
+                        //on the first loop
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(lastX + ((tankSprite.Width * 3) + (treeSprite.Width * 2.0f)), 0 + (treeSprite.Height * 1.5f));
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(lastX + ((tankSprite.Width * 3)+ (treeSprite.Width * 2.0f)), lastY + treeSprite.Height);
+                        }
+
+
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        wallList.Add(treeObject);
+                    }
+
+                    //reset lastY to 0
                     lastY = 0;
+
                 }
 
                 /////////////////////////////////////////////////////
@@ -268,11 +329,14 @@ namespace SceneHierarchyTute
 
             smokeObject.AddChild(smokeSprite);//set the smoke sprite as a child of smoke object
 
+            endObject.AddChild(endSprite); //add endSprite as a chiled of the end Object
 
             //set the position of the tank to the centre of the sceen
             tankObject.SetPosition((treeSprite.Width + (tankSprite.Width / 1.5f)), GetScreenHeight() - (treeSprite.Width + tankSprite.Width));
             tankObject.Rotate(-90 * (float)(Math.PI / 180.0f));
 
+            //set the position of the end Object
+            endObject.SetPosition(GetScreenWidth() - (treeSprite.Width /2.0f + (endSprite.Width / 2.0f) ), 0 + (treeSprite.Height + (endSprite.Height / 2.0f)));
 
         }
 
@@ -434,12 +498,12 @@ namespace SceneHierarchyTute
             tankObject.Update(deltaTime);
             treeObject.Update(deltaTime);
 
-            //call update on tree walls
-            foreach (SceneObject treeObject in wallList)
-            {
-                //draw tree
-                treeObject.Update(deltaTime);
-            }
+            ////call update on tree walls
+            //foreach (SceneObject treeObject in wallList)
+            //{
+            //    //draw tree
+            //    treeObject.Update(deltaTime);
+            //}
 
             //check if bullet has been shot
             if (shot)
@@ -528,6 +592,15 @@ namespace SceneHierarchyTute
             }
 
             lastTime = currentTime;
+
+            //check if tank has made it to the end
+            if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 2.0f) > endObject.GlobalTransform.m20 - (endSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 2.0f) < endObject.GlobalTransform.m20 + (endSprite.Width / 2.0f)) 
+            {
+                if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 2.0f) > endObject.GlobalTransform.m21 - (endSprite.Width / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 2.0f) < endObject.GlobalTransform.m21 + (endSprite.Width / 2.0f))
+                {
+                    end = true;
+                }
+            }
         }
 
         public void Draw()
@@ -537,43 +610,53 @@ namespace SceneHierarchyTute
             ClearBackground(Color.BLACK);
             DrawText(fps.ToString(), 10, 10, 12, Color.RED);
 
-            //call to draw the tank object
-            tankObject.Draw();
-            
-            //check if shot has been fired
-            if (shot)
+            if (!end)
             {
-                //draw bullet
-                bulletObject.Draw();
-            }
+                //call to draw the tank object
+                tankObject.Draw();
 
-            if (smokeTimer > 0)
-            {
-                smokeTimer++;
-                smokeObject.Draw();
+                //draw the endObject
+                endObject.Draw();
 
-                if (smokeTimer > 60)
+                //check if shot has been fired
+                if (shot)
                 {
-                    smokeTimer = 0;
+                    //draw bullet
+                    bulletObject.Draw();
+                }
+
+                if (smokeTimer > 0)
+                {
+                    smokeTimer++;
+                    smokeObject.Draw();
+
+                    if (smokeTimer > 60)
+                    {
+                        smokeTimer = 0;
+                    }
+                }
+
+
+                int i2 = 0;
+                //draw tree walls
+                foreach (SceneObject treeObject in wallList)
+                {
+                    //dont draw tree if object is of screen
+                    if (wallList[i2].GlobalTransform.m20 > 0)
+                    {
+                        //draw tree
+                        wallList[i2].Draw();
+                    }
+                    i2++;
                 }
             }
-            
 
-            int i2 = 0;
-            //draw tree walls
-            foreach (SceneObject treeObject in wallList)
+            if (end)
             {
-                //dont draw tree if object is of screen
-                if (wallList[i2].GlobalTransform.m20 > 0)
-                {
-                    //draw tree
-                    wallList[i2].Draw();
-                }
-                i2++;
+
             }
-            
-            
-            
+
+
             EndDrawing();
         }
 

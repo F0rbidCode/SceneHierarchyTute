@@ -15,6 +15,7 @@ namespace SceneHierarchyTute
             Raylib.SetTargetFPS(60);
             Raylib.InitWindow(1920, 1080, "Tanks for Everything!");
 
+            
 
             //initialize the audio device
             InitAudioDevice();
@@ -37,7 +38,7 @@ namespace SceneHierarchyTute
                 UpdateMusicStream(music);              
                
 
-                game.Update();
+                game.Update();                
                 game.Draw();
 
 
