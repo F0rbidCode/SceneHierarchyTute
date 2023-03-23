@@ -63,6 +63,9 @@ namespace SceneHierarchyTute
         //create the scene and sprite objects for the end point
         SceneObject endObject = new SceneObject();
         SpriteObject endSprite = new SpriteObject();
+
+        //create a list to set out the FIN screen
+        List<SceneObject> finList = new List<SceneObject>();
        
 
         public void Init()
@@ -338,6 +341,353 @@ namespace SceneHierarchyTute
             //set the position of the end Object
             endObject.SetPosition(GetScreenWidth() - (treeSprite.Width /2.0f + (endSprite.Width / 2.0f) ), 0 + (treeSprite.Height + (endSprite.Height / 2.0f)));
 
+
+            ///////////////////////////////////////////////////////////////
+            ///FIN SCREEN
+            ///////////////////////////////////////////////////////////////
+            {
+                if (!end)
+                {
+                    //set up the first line in the I
+                    lastX = 0;
+                    lastY = 0;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+
+                        //on the first loop
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(GetScreenWidth() / 2.0f, GetRenderHeight() / 2.0f);
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(GetScreenWidth() / 2.0f, lastY - treeSprite.Height);
+                        }
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }
+                    //set the top of the I
+                    float mX = lastX; //used to come back to the top centre of the I
+                    for (int i = 0; i < 3; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+
+                        treeObject.SetPosition(lastX - treeSprite.Width, lastY);
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }//Left
+                    float UIX = lastX;
+                    float UIY = lastY; // used to get back the the upper left of the I
+                    for (int i = 0; i < 3; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(mX + treeSprite.Width, lastY);
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(lastX + treeSprite.Width, lastY);
+                        }
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }//Right
+                    for (int i = 0; i < 5; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+
+                        //on the first loop
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(GetScreenWidth() / 2.0f, (GetRenderHeight() / 2.0f) + treeSprite.Height);
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(GetScreenWidth() / 2.0f, lastY + treeSprite.Height);
+                        }
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }//start the lower half of the I
+                    for (int i = 0; i < 3; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+
+                        treeObject.SetPosition(lastX - treeSprite.Width, lastY);
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }//Left
+                    for (int i = 0; i < 3; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(mX + treeSprite.Width, lastY);
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(lastX + treeSprite.Width, lastY);
+                        }
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }//Right                    
+                    float LIX = lastX;
+                    float LIY = lastY; //used to get back to the lower right spot on the I
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(UIX - (treeSprite.Width * 2), UIY);
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(lastX - treeSprite.Width, lastY);
+                        }
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }//top line on F
+                    UIY = lastY; //used to get back to the upper left of the F
+                    for (int i = 0; i < 5; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(UIX - (treeSprite.Width * 2), UIY + (treeSprite.Height * 3));
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(lastX - treeSprite.Width, lastY);
+                        }
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }//lower line on F
+                    UIX = lastX; //used to get back to the upper left of the F
+                    for (int i = 0; i < 10; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(UIX - (treeSprite.Width), UIY);
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(lastX, lastY + treeSprite.Width);
+                        }
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }//virtical line of the F
+
+
+                    //Start the N
+                    for (int i = 0; i < 10; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(LIX + (treeSprite.Width * 2), LIY);
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(lastX, lastY - treeSprite.Width);
+                        }
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }//first line of N
+
+                    for (int i = 0; i < 9; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+                                                       
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(lastX + (treeSprite.Width), lastY + (treeSprite.Width /2.0f));
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(lastX + (treeSprite.Width / 2.0f), lastY + treeSprite.Width);
+                        }
+
+                        
+                        
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }//second line of N
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        //create new Scene and sprite objects for the trees
+                        SceneObject treeObject = new SceneObject();
+                        SpriteObject treeSprite = new SpriteObject();
+
+                        //load the image for the tree
+                        treeSprite.Load(@"data\treeGreen_small.png");
+
+                        //set the sprite offset to be in the centre of the tree object                
+                        treeSprite.SetPosition(-treeSprite.Width / 2.0f, -treeSprite.Height / 2.0f);
+
+                        treeObject.AddChild(treeSprite);//set the tree sprite as a child of tree object
+                        if (i == 0)
+                        {
+                            treeObject.SetPosition(lastX + (treeSprite.Width), LIY);
+                        }
+                        else
+                        {
+                            treeObject.SetPosition(lastX, lastY - treeSprite.Width);
+                        }
+
+                        lastX = treeObject.GlobalTransform.m20;
+                        lastY = treeObject.GlobalTransform.m21;
+
+                        finList.Add(treeObject);
+                    }//last line of N
+                }
+            }
+
+
         }
 
         public void Shutdown()
@@ -378,121 +728,124 @@ namespace SceneHierarchyTute
             frames++;
 
             
-
-            //get user input to move the tank
-            if (IsKeyDown(KeyboardKey.KEY_A))
+            if(!end)
             {
-                tankObject.Rotate(-deltaTime);
-            }
-            if(IsKeyDown(KeyboardKey.KEY_D))
-            {
-                tankObject.Rotate(deltaTime);
-            }
-            if(IsKeyDown(KeyboardKey.KEY_W))
-            {
-                //stop the tank from moving if recently ran into wall
-                if (moveDelay == 0)
+                //get user input to move the tank
+                if (IsKeyDown(KeyboardKey.KEY_A))
                 {
-                    Vector3 facing = new Vector3(
-                     tankObject.LocalTransform.m00,
-                     tankObject.LocalTransform.m01, 1) * deltaTime * 100;
-                    tankObject.Translate(facing.x, facing.y);
-
-                    //cycle through the wall list to check if tank colides with wall
-                    int i3 = 0;
-                    foreach (SceneObject treeObject in wallList)
+                    tankObject.Rotate(-deltaTime);
+                }
+                if (IsKeyDown(KeyboardKey.KEY_D))
+                {
+                    tankObject.Rotate(deltaTime);
+                }
+                if (IsKeyDown(KeyboardKey.KEY_W))
+                {
+                    //stop the tank from moving if recently ran into wall
+                    if (moveDelay == 0)
                     {
-                        if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
+                        Vector3 facing = new Vector3(
+                         tankObject.LocalTransform.m00,
+                         tankObject.LocalTransform.m01, 1) * deltaTime * 100;
+                        tankObject.Translate(facing.x, facing.y);
+
+                        //cycle through the wall list to check if tank colides with wall
+                        int i3 = 0;
+                        foreach (SceneObject treeObject in wallList)
                         {
-                            if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                            if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
                             {
-                                facing = new Vector3(
-                             tankObject.LocalTransform.m00,
-                             tankObject.LocalTransform.m01, 1) * deltaTime * -2000;
-                                tankObject.Translate(facing.x, facing.y);
+                                if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                                {
+                                    facing = new Vector3(
+                                 tankObject.LocalTransform.m00,
+                                 tankObject.LocalTransform.m01, 1) * deltaTime * -2000;
+                                    tankObject.Translate(facing.x, facing.y);
 
-                                moveDelay = 1;//start move delay counter
+                                    moveDelay = 1;//start move delay counter
 
 
+                                }
                             }
+                            //    else
+                            //    {
+                            //        Vector3 facing = new Vector3(
+                            // tankObject.LocalTransform.m00,
+                            // tankObject.LocalTransform.m01, 1) * deltaTime * 100;
+                            //        tankObject.Translate(facing.x, facing.y);
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    Vector3 facing = new Vector3(
+                            //  tankObject.LocalTransform.m00,
+                            //  tankObject.LocalTransform.m01, 1) * deltaTime * 100;
+                            //    tankObject.Translate(facing.x, facing.y);
+                            //}
+                            i3++;
                         }
-                        //    else
-                        //    {
-                        //        Vector3 facing = new Vector3(
-                        // tankObject.LocalTransform.m00,
-                        // tankObject.LocalTransform.m01, 1) * deltaTime * 100;
-                        //        tankObject.Translate(facing.x, facing.y);
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    Vector3 facing = new Vector3(
-                        //  tankObject.LocalTransform.m00,
-                        //  tankObject.LocalTransform.m01, 1) * deltaTime * 100;
-                        //    tankObject.Translate(facing.x, facing.y);
-                        //}
-                        i3++;
                     }
-                }
-                      
-            }
-            if(IsKeyDown(KeyboardKey.KEY_S))
-            {
-                //stop the tank from moving if recently ran into wall
-                if (moveDelay == 0)
-                {
-                    Vector3 facing = new Vector3(
-                    tankObject.LocalTransform.m00,
-                    tankObject.LocalTransform.m01, 1) * deltaTime * -100;
-                    tankObject.Translate(facing.x, facing.y);
 
-                    //cycle through the wall list to check if tank colides with wall
-                    int i3 = 0;
-                    foreach (SceneObject treeObject in wallList)
+                }
+                if (IsKeyDown(KeyboardKey.KEY_S))
+                {
+                    //stop the tank from moving if recently ran into wall
+                    if (moveDelay == 0)
                     {
-                        if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m20 - (treeSprite.Width /2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
+                        Vector3 facing = new Vector3(
+                        tankObject.LocalTransform.m00,
+                        tankObject.LocalTransform.m01, 1) * deltaTime * -100;
+                        tankObject.Translate(facing.x, facing.y);
+
+                        //cycle through the wall list to check if tank colides with wall
+                        int i3 = 0;
+                        foreach (SceneObject treeObject in wallList)
                         {
-                            if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                            if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
                             {
-                                facing = new Vector3(
-                             tankObject.LocalTransform.m00,
-                             tankObject.LocalTransform.m01, 1) * deltaTime * 2000;
-                                tankObject.Translate(facing.x, facing.y);
+                                if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                                {
+                                    facing = new Vector3(
+                                 tankObject.LocalTransform.m00,
+                                 tankObject.LocalTransform.m01, 1) * deltaTime * 2000;
+                                    tankObject.Translate(facing.x, facing.y);
 
-                                moveDelay = 1;//start move delay counter
+                                    moveDelay = 1;//start move delay counter
 
 
+                                }
                             }
+                            i3++;
                         }
-                        i3++;
                     }
+
                 }
-                
-            }
 
-            //get user input to move the turret
-            if (IsKeyDown(KeyboardKey.KEY_Q))
-            {
-                turretObject.Rotate(-deltaTime);
-            }
-            if (IsKeyDown(KeyboardKey.KEY_E))
-            {
-                turretObject.Rotate(deltaTime);
-            }
-
-            //get user inpuit to fire bullet
-            if (IsKeyDown (KeyboardKey.KEY_SPACE))
-            {
-                if (!shot)
+                //get user input to move the turret
+                if (IsKeyDown(KeyboardKey.KEY_Q))
                 {
-                    Shoot();
-                    
-                    
-
-                    shot = true;
+                    turretObject.Rotate(-deltaTime);
                 }
-               
+                if (IsKeyDown(KeyboardKey.KEY_E))
+                {
+                    turretObject.Rotate(deltaTime);
+                }
+
+                //get user inpuit to fire bullet
+                if (IsKeyDown(KeyboardKey.KEY_SPACE))
+                {
+                    if (!shot)
+                    {
+                        Shoot();
+
+
+
+                        shot = true;
+                    }
+
+                }
             }
+            
 
             //call update on tank object
             tankObject.Update(deltaTime);
@@ -594,9 +947,9 @@ namespace SceneHierarchyTute
             lastTime = currentTime;
 
             //check if tank has made it to the end
-            if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 2.0f) > endObject.GlobalTransform.m20 - (endSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 2.0f) < endObject.GlobalTransform.m20 + (endSprite.Width / 2.0f)) 
+            if (tankObject.GlobalTransform.m20  > endObject.GlobalTransform.m20 - (endSprite.Width / 2.0f) && tankObject.GlobalTransform.m20  < endObject.GlobalTransform.m20 + (endSprite.Width / 2.0f)) 
             {
-                if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 2.0f) > endObject.GlobalTransform.m21 - (endSprite.Width / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 2.0f) < endObject.GlobalTransform.m21 + (endSprite.Width / 2.0f))
+                if (tankObject.GlobalTransform.m21  > endObject.GlobalTransform.m21 - (endSprite.Width / 2.0f) && tankObject.GlobalTransform.m21 < endObject.GlobalTransform.m21 + (endSprite.Width / 2.0f))
                 {
                     end = true;
                 }
@@ -653,7 +1006,12 @@ namespace SceneHierarchyTute
 
             if (end)
             {
-
+                int i = 0;
+                foreach (SceneObject treeObject in finList)
+                {
+                    finList[i].Draw();
+                    i++;
+                }
             }
 
 
