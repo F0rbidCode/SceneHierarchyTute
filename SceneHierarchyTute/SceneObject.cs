@@ -39,13 +39,13 @@ namespace SceneHierarchyTute
         }
 
         //create a function to return the local transfrom of the game object
-        public Matrix3 LocalTransfrom
+        public Matrix3 LocalTransform
         {
             get { return localTransform; }
         }
 
         //create a function to return the global transfrom of the game object
-        public Matrix3 GlobalTransfrom
+        public Matrix3 GlobalTransform
         {
             get { return globalTransform; }
         }

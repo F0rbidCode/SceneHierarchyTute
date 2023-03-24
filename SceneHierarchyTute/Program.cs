@@ -9,7 +9,7 @@ namespace SceneHierarchyTute
             Game game = new Game();
 
             Raylib.SetTargetFPS(60);
-            Raylib.InitWindow(640, 480, "Tanks for Everything!");
+            Raylib.InitWindow(1920, 1080, "Tanks for Everything!");
 
             game.Init();
 

@@ -11,4 +11,13 @@
     <PackageReference Include="Raylib-cs" Version="4.2.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="barrelBlue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tankBlue_outline.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
