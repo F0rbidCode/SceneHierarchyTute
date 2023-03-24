@@ -11,15 +11,18 @@ namespace SceneHierarchyTute
 {
     internal class Game
     {
-        Stopwatch stopwatch = new Stopwatch();
+        //Stopwatch stopwatch = new Stopwatch();        
 
-        private long currentTime = 0;
-        private long lastTime = 0;
-        private float timer = 0;
+        //private long currentTime = 0;
+        //private long lastTime = 0;
+        //private float timer = 0;
         private int fps = 1;
-        private int frames;
+        //private int frames;
 
-        private float deltaTime = 0.005f;
+        //private float deltaTime = 0.005f;
+
+
+        Timer timer = new Timer();
 
         //create a variable used to adjust bullet speed
         private int bulletSpeed = 200;
@@ -70,9 +73,10 @@ namespace SceneHierarchyTute
 
         public void Init()
         {
-            stopwatch.Start();
-            lastTime = stopwatch.ElapsedMilliseconds;
+            //stopwatch.Start();
+            //lastTime = stopwatch.ElapsedMilliseconds;
 
+            
 
             //load the tank imiges into the sprites
             tankSprite.Load(@"data\tankBlue_outline.png");
@@ -697,10 +701,23 @@ namespace SceneHierarchyTute
 
         public void Update()
         {
-            currentTime = stopwatch.ElapsedMilliseconds;
-            deltaTime = (currentTime - lastTime) / 1000.0f;
+            //currentTime = stopwatch.ElapsedMilliseconds;
+            //deltaTime = (currentTime - lastTime) / 1000.0f;
 
-            timer += deltaTime;
+            //timer += deltaTime;
+                        //if(timer >= 1)
+            //{
+            //    fps = frames;
+            //    frames = 0;
+            //    timer -= 1;
+            //}
+            //frames++;
+            
+            float deltaTime = timer.GetDeltaTime();
+            fps = timer.UpdateFPS(deltaTime);
+            
+
+
 
             //increment move delay by 1 every updte if it does not = 0
             if (moveDelay != 0)
@@ -717,17 +734,6 @@ namespace SceneHierarchyTute
                 smokeTimer++;
             }
 
-            
-
-            if(timer >= 1)
-            {
-                fps = frames;
-                frames = 0;
-                timer -= 1;
-            }
-            frames++;
-
-            
             if(!end)
             {
                 //get user input to move the tank
@@ -844,7 +850,7 @@ namespace SceneHierarchyTute
                     }
 
                 }
-            }
+            }//movement
             
 
             //call update on tank object
@@ -944,7 +950,7 @@ namespace SceneHierarchyTute
                 //}
             }
 
-            lastTime = currentTime;
+            //lastTime = currentTime;
 
             //check if tank has made it to the end
             if (tankObject.GlobalTransform.m20  > endObject.GlobalTransform.m20 - (endSprite.Width / 2.0f) && tankObject.GlobalTransform.m20  < endObject.GlobalTransform.m20 + (endSprite.Width / 2.0f)) 
@@ -961,7 +967,7 @@ namespace SceneHierarchyTute
             BeginDrawing();
 
             ClearBackground(Color.BLACK);
-            DrawText(fps.ToString(), 10, 10, 12, Color.RED);
+            
 
             if (!end)
             {
@@ -1014,7 +1020,7 @@ namespace SceneHierarchyTute
                 }
             }
 
-
+            DrawText(fps.ToString(), 10, 10, 20, Color.RED);
             EndDrawing();
         }
 
