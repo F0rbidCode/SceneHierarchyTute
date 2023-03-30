@@ -174,14 +174,14 @@ namespace SceneHierarchyTute
         //create function to rotate the object arroudn the z axis
         public void Rotate (float radians)
         {
-            localTransform.RotateZ(radians);
+            localTransform.RotateZ(ref localTransform, radians);
             UpdateTransform();
         }
 
         //create a function to scale the objects transform
         public void Scale(float width, float height)
         {
-            localTransform.Scale(width, height, 1);
+            localTransform.Scale(ref localTransform, width, height, 1);
             UpdateTransform();
         }
     }

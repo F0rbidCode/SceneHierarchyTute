@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SceneHierarchyTute
 {
     //declair Vector3 as a struct
-    public struct Vector3
+    public class Vector3
     {
         public float x;
         public float y;

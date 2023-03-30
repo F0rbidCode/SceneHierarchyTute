@@ -10,11 +10,16 @@ using System.Threading.Tasks;
 namespace SceneHierarchyTute
 {
     //declair Matrix3 as a struct
-    public struct Matrix3
+    public class Matrix3
     {
         public float m00, m01, m02; //x axis
         public float m10, m11, m12; //y axis
         public float m20, m21, m22; //z axis
+
+        public Matrix3()
+        {
+
+        }
 
         //create a constructor taking individual elements and asigning them
         public Matrix3(float _m00, float _m01, float _m02, float _m10, float _m11, float _m12, float _m20, float _m21, float _m22)
@@ -111,11 +116,11 @@ namespace SceneHierarchyTute
         }
 
         //create a cuntion to scale a Matrix3 based on 3 passed in floats
-        public void Scale(float x, float y, float z)
+        public void Scale(ref Matrix3 transform, float x, float y, float z)
         {
             Matrix3 m = new Matrix3();
             m.SetScaled(x, y, z);
-            this = this * m;
+            transform = this * m;
         }
 
         //create a function to create a rotation matrix3 to rotate around the X axis
@@ -144,12 +149,12 @@ namespace SceneHierarchyTute
         }
 
         //create a function to rotate aroudn the z axis
-        public void RotateZ(double radians)
+        public void RotateZ(ref Matrix3 transform, double radians)
         {
             Matrix3 m = new Matrix3();
             m.SetRotateZ(radians);
 
-            this = this * m;
+            transform = this * m;
         }
 
         //create a funtion to set a Euler roation
