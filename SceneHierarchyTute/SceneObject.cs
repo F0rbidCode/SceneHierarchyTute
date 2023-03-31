@@ -204,9 +204,14 @@ namespace SceneHierarchyTute
             angle = angle * (float)(180 / Math.PI);
             if (globalTransform.m21 < pTransform.m21 || globalTransform.m21 == pTransform.m21)
                 {
-                    angle = angle + 45;
+                    angle = angle + 40;
                 }
-            
+            if (globalTransform.m21 > pTransform.m21)
+            {
+                angle = angle + 40;
+            }
+
+
             angle = angle * (float)(Math.PI / 180);
             angle = angle - facing; 
             
