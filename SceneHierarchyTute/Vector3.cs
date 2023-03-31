@@ -22,6 +22,21 @@ namespace SceneHierarchyTute
             z = _z;
         }
 
+        //functions for creating min and max vectors for the AABB
+        public static Vector3 Min(Vector3 a, Vector3 b)
+        {
+            return new Vector3(Math.Min(a.x, b.x), Math.Min(a.y, b.y), Math.Min(a.z, b.z));
+        }
+        public static Vector3 Max(Vector3 a, Vector3 b)
+        {
+            return new Vector3(Math.Max(a.x, b.x), Math.Max(a.y, b.y), Math.Max(a.z, b.z));
+        }
+        //function to clamp value t byt the min and max values
+        public static Vector3 Clamp(Vector3 t, Vector3 a, Vector3 b)
+        {
+            return Max(a, Min(b, t));
+        }
+
         //create a function to add 2 vector3s together
         public static Vector3 operator +(Vector3 lhs, Vector3 rhs)
         {

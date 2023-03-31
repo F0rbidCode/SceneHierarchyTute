@@ -53,6 +53,7 @@ namespace SceneHierarchyTute
         //create new scene and sprite objects for tank body and tank turret
         SceneObject tankObject = new SceneObject();
         SceneObject turretObject = new SceneObject();
+        OABB tankOABB = new OABB();
 
         SpriteObject tankSprite = new SpriteObject();
         SpriteObject turretSprite = new SpriteObject();
@@ -371,6 +372,7 @@ namespace SceneHierarchyTute
             turretObject.AddChild(turretSprite); //set the turret sprite to be a child of the turret object
             tankObject.AddChild(tankSprite); //set the tank sprite to be a child of the tank object
             tankObject.AddChild(turretObject); //set the turret object to be a child of the tank object
+            tankObject.AddChild(tankOABB); // set the oabb to a child of the tank
 
             bulletObject.AddChild(bulletSprite); //set bullet sprite as a child of bullet object
             
@@ -879,7 +881,7 @@ namespace SceneHierarchyTute
             float deltaTime = timer.GetDeltaTime();
             fps = timer.UpdateFPS(deltaTime);
 
-
+            
 
 
             //increment move delay by 1 every updte if it does not = 0
@@ -1160,6 +1162,26 @@ namespace SceneHierarchyTute
             eTankObject.Update(deltaTime);
             treeObject.Update(deltaTime);
 
+            /////////////////////////////////////////////////////////////////
+            //////FIT OABB
+            /////////////////////////////////////////////////////////////////
+            {
+                Vector3[] point = new Vector3[4];
+                Vector3 p0 = new Vector3(tankObject.GlobalTransform.m20 - (tankSprite.Height / 2), tankSprite.GlobalTransform.m21, 1);
+                point[0] = p0;
+
+                Vector3 p1 = new Vector3(tankSprite.GlobalTransform.m20 + (tankSprite.Height / 2), tankSprite.GlobalTransform.m21, 1);
+                point[1] = p1;
+
+                Vector3 p2 = new Vector3 (tankSprite.GlobalTransform.m20, tankSprite.GlobalTransform.m21 - (tankSprite.Width / 2), 1);
+                point[2] = p2;
+
+                Vector3 p3 = new Vector3(tankSprite.GlobalTransform.m20, tankSprite.GlobalTransform.m21 + (tankSprite.Width / 2), 1);
+                point[3]= p3;
+
+                tankOABB.Fit(point);
+            }
+
             ////call update on tree walls
             //foreach (SceneObject treeObject in wallList)
             //{
@@ -1378,9 +1400,11 @@ namespace SceneHierarchyTute
                     i++;
                 }
 
-                if (eBulletSprite.GlobalTransform.m20 > tankSprite.GlobalTransform.m20 - (tankSprite.Width) && eBulletSprite.GlobalTransform.m20 < tankSprite.GlobalTransform.m20 + (tankSprite.Width / 6.0f))
+                //if (eBulletSprite.GlobalTransform.m20 > tankSprite.GlobalTransform.m20 - (tankSprite.Width) && eBulletSprite.GlobalTransform.m20 < tankSprite.GlobalTransform.m20 + (tankSprite.Width / 6.0f))
                 {
-                    if (eBulletSprite.GlobalTransform.m21 > tankSprite.GlobalTransform.m21 - (tankSprite.Height ) && eBulletSprite.GlobalTransform.m21 < tankSprite.GlobalTransform.m21 + (tankSprite.Height / 6.0f))
+                    // if (eBulletSprite.GlobalTransform.m21 > tankSprite.GlobalTransform.m21 - (tankSprite.Height ) && eBulletSprite.GlobalTransform.m21 < tankSprite.GlobalTransform.m21 + (tankSprite.Height / 6.0f))
+                    Vector3 b = new Vector3(eBulletSprite.GlobalTransform.m20, eBulletSprite.GlobalTransform.m21, eBulletSprite.GlobalTransform.m22);
+                    if  (tankOABB.Overlaps(b))
                     {
                         //load sounds
                         Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
