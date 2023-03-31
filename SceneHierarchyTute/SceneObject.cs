@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -184,5 +186,51 @@ namespace SceneHierarchyTute
             localTransform.Scale(ref localTransform, width, height, 1);
             UpdateTransform();
         }
+
+        public float GetAngleTowards (Matrix3 pTransform)
+        {
+            Vector3 e = new Vector3(globalTransform.m20, globalTransform.m21, globalTransform.m22);
+            Vector3 p = new Vector3(pTransform.m20, pTransform.m21, pTransform.m22);
+            Vector3 toPlayer = p - e;
+            
+            float angle = (float)-(Math.Atan2(p.x, p.y) - Math.Atan2(e.x, e.y));
+            //float angle = e.AngleBetween(p);
+            
+            float facing = (float)(Math.Atan2(GlobalTransform.m01, GlobalTransform.m11));
+            // angle = angle + (float)(Math.Atan2(pTransform.m01, pTransform.m11) * (180 / Math.PI));
+
+
+
+            angle = angle * (float)(180 / Math.PI);
+            if (globalTransform.m21 < pTransform.m21 || globalTransform.m21 == pTransform.m21)
+                {
+                    angle = angle + 45;
+                }
+            
+            angle = angle * (float)(Math.PI / 180);
+            angle = angle - facing; 
+            
+
+
+
+            
+            return angle;
+        }
+
+        //public void RotateTowards (Matrix3 pTransform, float deltaTime)
+        //{
+        //    Vector3 e = new Vector3(globalTransform.m20, globalTransform.m21, globalTransform.m22);
+        //    Vector3 p = new Vector3(pTransform.m20, pTransform.m21, pTransform.m22);
+        //    e.Normalize();
+        //    p.Normalize();            
+        //    Vector3 a = p - e;
+
+        //    float angle = (float)-(Math.Atan2(a.z, a.x) + Math.PI / 2);
+        //    Vector3 Rotate = new Vector3(0, angle, 0);
+
+        //    if (angle > 5)
+        //        this.Rotate(deltaTime);
+
+        //}
     }
 }

@@ -69,7 +69,15 @@ namespace SceneHierarchyTute
 
         //create a list to set out the FIN screen
         List<SceneObject> finList = new List<SceneObject>();
-       
+
+        //create new scene and sprite objects for tank body and tank turret
+        SceneObject eTankObject = new SceneObject();
+        SceneObject eTurretObject = new SceneObject();
+
+        SpriteObject eTankSprite = new SpriteObject();
+        SpriteObject eTurretSprite = new SpriteObject();
+
+
 
         public void Init()
         {
@@ -97,6 +105,26 @@ namespace SceneHierarchyTute
             endSprite.Load(@"data\explosion1.png");
             //set the offset to be centred
             endSprite.SetPosition(-endSprite.Width / 2.0f, -endSprite.Height / 2.0f);
+
+            ///////////////////////////////////////////////////////
+            ///eney tank
+            /////////////////////////////////////////////////////
+            {
+                //load the tank imiges into the sprites
+                eTankSprite.Load(@"data\tankGreen_outline.png");
+                //rotate the sprite so it faces the right way
+                eTankSprite.SetRotate(-90 * (float)(Math.PI / 180.0f));
+                //set an offset for the base of the tank so that it rotates around the centre
+                eTankSprite.SetPosition(-eTankSprite.Width / 2.0f, eTankSprite.Height / 2.0f);
+
+
+                //load the image for the tank turret
+                eTurretSprite.Load(@"data\barrelGreen_outline.png");
+                //rotate the sprite so it faces the right way
+                eTurretSprite.SetRotate(-90 * (float)(Math.PI / 180.0f));
+                // set the turret offset from the tank base
+                eTurretSprite.SetPosition(0, eTurretSprite.Width / 2.0f);
+            }
 
             //////////////////////////////////////////////////////////////////
             //////TREE WALLS!!!!!!!!!!!
@@ -345,6 +373,17 @@ namespace SceneHierarchyTute
             //set the position of the end Object
             endObject.SetPosition(GetScreenWidth() - (treeSprite.Width /2.0f + (endSprite.Width / 2.0f) ), 0 + (treeSprite.Height + (endSprite.Height / 2.0f)));
 
+           //if(end)
+            {
+                //set the scene object hierarchy
+                eTurretObject.AddChild(eTurretSprite); //set the turret sprite to be a child of the turret object
+                eTankObject.AddChild(eTankSprite); //set the tank sprite to be a child of the tank object
+                eTankObject.AddChild(eTurretObject); //set the turret object to be a child of the tank object
+
+                //set the position of the tank to the centre of the sceen
+                eTankObject.SetPosition((treeSprite.Width + (eTankSprite.Width / 1.5f)), (treeSprite.Height + eTankSprite.Width));
+                eTankObject.Rotate(-90 * (float)(Math.PI / 180.0f));
+            }
 
             ///////////////////////////////////////////////////////////////
             ///FIN SCREEN
@@ -700,19 +739,19 @@ namespace SceneHierarchyTute
         }
 
         public void Update()
-        {
+        {            
             //currentTime = stopwatch.ElapsedMilliseconds;
             //deltaTime = (currentTime - lastTime) / 1000.0f;
 
             //timer += deltaTime;
-                        //if(timer >= 1)
+            //if(timer >= 1)
             //{
             //    fps = frames;
             //    frames = 0;
             //    timer -= 1;
             //}
             //frames++;
-            
+
             float deltaTime = timer.GetDeltaTime();
             fps = timer.UpdateFPS(deltaTime);
             
@@ -733,7 +772,9 @@ namespace SceneHierarchyTute
             {
                 smokeTimer++;
             }
-
+            ////////////////////////////////////////////////////////////////////////////////////
+            //////MOVENET
+            ///////////////////////////////////////////////////////////////////////////////////
             if(!end)
             {
                 //get user input to move the tank
@@ -773,6 +814,7 @@ namespace SceneHierarchyTute
 
                                 }
                             }
+                           
                             //    else
                             //    {
                             //        Vector3 facing = new Vector3(
@@ -789,6 +831,26 @@ namespace SceneHierarchyTute
                             //    tankObject.Translate(facing.x, facing.y);
                             //}
                             i3++;
+                        }
+
+                        if (tankSprite.GlobalTransform.m20 < 0 + (tankSprite.Height) || tankSprite.GlobalTransform.m20 > GetScreenWidth() - (tankSprite.Height))
+                        {
+                            facing = new Vector3(
+                            tankObject.LocalTransform.m00,
+                            tankObject.LocalTransform.m01, 1) * deltaTime * -4000;
+                            tankObject.Translate(facing.x, facing.y);
+
+                            moveDelay = 1;//start move delay counter
+                        }
+
+                        if (tankSprite.GlobalTransform.m21 < 0 + (tankSprite.Width) || tankSprite.GlobalTransform.m21 > GetScreenHeight() - (tankSprite.Height))
+                        {
+                            facing = new Vector3(
+                            tankObject.LocalTransform.m00,
+                            tankObject.LocalTransform.m01, 1) * deltaTime * -4000;
+                            tankObject.Translate(facing.x, facing.y);
+
+                            moveDelay = 1;//start move delay counter
                         }
                     }
 
@@ -823,6 +885,26 @@ namespace SceneHierarchyTute
                             }
                             i3++;
                         }
+
+                        if (tankSprite.GlobalTransform.m20 < 0 + (tankSprite.Height / 4.0f) || tankSprite.GlobalTransform.m20 > GetScreenWidth() - (tankSprite.Height / 4.0f))
+                        {
+                            facing = new Vector3(
+                            tankObject.LocalTransform.m00,
+                            tankObject.LocalTransform.m01, 1) * deltaTime * 4000;
+                            tankObject.Translate(facing.x, facing.y);
+
+                            moveDelay = 1;//start move delay counter
+                        }
+
+                        if (tankSprite.GlobalTransform.m21 < 0 + (tankSprite.Width / 4.0f) || tankSprite.GlobalTransform.m21 > GetScreenHeight() - (tankSprite.Height / 4.0f))
+                        {
+                            facing = new Vector3(
+                            tankObject.LocalTransform.m00,
+                            tankObject.LocalTransform.m01, 1) * deltaTime * 4000;
+                            tankObject.Translate(facing.x, facing.y);
+
+                            moveDelay = 1;//start move delay counter
+                        }
                     }
 
                 }
@@ -831,10 +913,18 @@ namespace SceneHierarchyTute
                 if (IsKeyDown(KeyboardKey.KEY_Q))
                 {
                     turretObject.Rotate(-deltaTime);
+
+                    
+
                 }
                 if (IsKeyDown(KeyboardKey.KEY_E))
                 {
                     turretObject.Rotate(deltaTime);
+
+                    Console.WriteLine("m00" + tankObject.GlobalTransform.m00 + " m01" + tankObject.GlobalTransform.m01 + " m02" + tankObject.GlobalTransform.m02);
+                    Console.WriteLine("m10" + tankObject.GlobalTransform.m10 + " m11" + tankObject.GlobalTransform.m11 + " m12" + tankObject.GlobalTransform.m12);
+                    Console.WriteLine("m20" + tankObject.GlobalTransform.m20 + " m21" + tankObject.GlobalTransform.m21 + " m22" + tankObject.GlobalTransform.m22);
+
                 }
 
                 //get user inpuit to fire bullet
@@ -855,6 +945,7 @@ namespace SceneHierarchyTute
 
             //call update on tank object
             tankObject.Update(deltaTime);
+            eTankObject.Update(deltaTime);
             treeObject.Update(deltaTime);
 
             ////call update on tree walls
@@ -960,6 +1051,25 @@ namespace SceneHierarchyTute
                     end = true;
                 }
             }
+
+            /////////////////////////////////////////////////////////////////////////
+            ////////Rotate enemy tank to face player
+            //////////////////////////////////////////////////////////////////////////
+            {
+                ///rotate the enemy tank to face the player
+                float angleTo = eTankObject.GetAngleTowards(tankObject.GlobalTransform);
+                //eTankObject.Rotate(angleTo);
+                if (angleTo > 0)
+                {
+                    eTankObject.Rotate(deltaTime);
+                }
+                if (angleTo < 0)
+                {
+                    eTankObject.Rotate(-deltaTime);
+                }
+
+                //eTankObject.RotateTowards(tankObject.GlobalTransform, deltaTime);
+            }
         }
 
         public void Draw()
@@ -971,11 +1081,14 @@ namespace SceneHierarchyTute
 
             if (!end)
             {
+                
                 //call to draw the tank object
                 tankObject.Draw();
 
                 //draw the endObject
                 endObject.Draw();
+
+                eTankObject.Draw();
 
                 //check if shot has been fired
                 if (shot)
@@ -1018,6 +1131,9 @@ namespace SceneHierarchyTute
                     finList[i].Draw();
                     i++;
                 }
+
+                tankObject.Draw();
+                eTankObject.Draw();                
             }
 
             DrawText(fps.ToString(), 10, 10, 20, Color.RED);
