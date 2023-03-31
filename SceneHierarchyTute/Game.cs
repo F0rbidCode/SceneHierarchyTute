@@ -30,6 +30,7 @@ namespace SceneHierarchyTute
         //create a variable to know if shot has occurd
         bool shot = false;
         private int smokeTimer = 0;
+        bool isDead = false;
 
         private int moveDelay = 0;
 
@@ -39,6 +40,7 @@ namespace SceneHierarchyTute
         //create a variable to know if shot has occurd
         bool eShot = false;
         private int eSmokeTimer = 0;
+        bool eIsDead = false;
 
 
         //Create a list to store the treeObjects that are used to make the walls
@@ -364,10 +366,7 @@ namespace SceneHierarchyTute
 
             }
 
-            //////////////////////////////////////////////////////////////////
-            ///////END WALLS
-            //////////////////////////////////////////////////////////////////
-
+            
             //set the scene object hierarchy
             turretObject.AddChild(turretSprite); //set the turret sprite to be a child of the turret object
             tankObject.AddChild(tankSprite); //set the tank sprite to be a child of the tank object
@@ -388,21 +387,18 @@ namespace SceneHierarchyTute
             //set the position of the end Object
             endObject.SetPosition(GetScreenWidth() - (treeSprite.Width /2.0f + (endSprite.Width / 2.0f) ), 0 + (treeSprite.Height + (endSprite.Height / 2.0f)));
 
-           //if(end)
-            {
-                //set the scene object hierarchy
-                eTurretObject.AddChild(eTurretSprite); //set the turret sprite to be a child of the turret object
-                eTankObject.AddChild(eTankSprite); //set the tank sprite to be a child of the tank object
-                eTankObject.AddChild(eTurretObject); //set the turret object to be a child of the tank object
+            //set the scene object hierarchy for enemy tank
+            eTurretObject.AddChild(eTurretSprite); //set the turret sprite to be a child of the turret object
+            eTankObject.AddChild(eTankSprite); //set the tank sprite to be a child of the tank object
+            eTankObject.AddChild(eTurretObject); //set the turret object to be a child of the tank object
 
-                //set the position of the tank to the centre of the sceen
-                eTankObject.SetPosition((treeSprite.Width + (eTankSprite.Width / 1.5f)), (treeSprite.Height + eTankSprite.Width));
-                eTankObject.Rotate(-90 * (float)(Math.PI / 180.0f));
+            eBulletObject.AddChild(eBulletSprite); //set bullet sprite as a child of bullet object
 
-                eBulletObject.AddChild(eBulletSprite); //set bullet sprite as a child of bullet object
+            eSmokeObject.AddChild(eSmokeSprite);//set the smoke sprite as a child of smoke object
 
-                eSmokeObject.AddChild(eSmokeSprite);//set the smoke sprite as a child of smoke object
-            }
+            //set the position of the tank to the centre of the sceen
+            eTankObject.SetPosition(eTankSprite.Width, eTankSprite.Height);
+            eTankObject.Rotate(-90 * (float)(Math.PI / 180.0f));
 
             ///////////////////////////////////////////////////////////////
             ///FIN SCREEN
@@ -758,7 +754,7 @@ namespace SceneHierarchyTute
         }
 
         public void Update()
-        {            
+        {
             //currentTime = stopwatch.ElapsedMilliseconds;
             //deltaTime = (currentTime - lastTime) / 1000.0f;
 
@@ -773,7 +769,7 @@ namespace SceneHierarchyTute
 
             float deltaTime = timer.GetDeltaTime();
             fps = timer.UpdateFPS(deltaTime);
-            
+
 
 
 
@@ -795,7 +791,7 @@ namespace SceneHierarchyTute
             //////MOVENET
             ///////////////////////////////////////////////////////////////////////////////////
             {
-                if (!end)
+                if (!isDead)
                 {
                     //get user input to move the tank
                     if (IsKeyDown(KeyboardKey.KEY_A))
@@ -816,43 +812,71 @@ namespace SceneHierarchyTute
                              tankObject.LocalTransform.m01, 1) * deltaTime * 100;
                             tankObject.Translate(facing.x, facing.y);
 
-                            //cycle through the wall list to check if tank colides with wall
-                            int i3 = 0;
-                            foreach (SceneObject treeObject in wallList)
+                            if (!end)
                             {
-                                if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
+                                //cycle through the wall list to check if tank colides with wall
+                                int i3 = 0;
+                                foreach (SceneObject treeObject in wallList)
                                 {
-                                    if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                                    if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
                                     {
-                                        facing = new Vector3(
-                                     tankObject.LocalTransform.m00,
-                                     tankObject.LocalTransform.m01, 1) * deltaTime * -2000;
-                                        tankObject.Translate(facing.x, facing.y);
+                                        if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                                        {
+                                            facing = new Vector3(
+                                         tankObject.LocalTransform.m00,
+                                         tankObject.LocalTransform.m01, 1) * deltaTime * -2000;
+                                            tankObject.Translate(facing.x, facing.y);
 
-                                        moveDelay = 1;//start move delay counter
+                                            moveDelay = 1;//start move delay counter
 
 
+                                        }
+                                    }
+
+                                    //    else
+                                    //    {
+                                    //        Vector3 facing = new Vector3(
+                                    // tankObject.LocalTransform.m00,
+                                    // tankObject.LocalTransform.m01, 1) * deltaTime * 100;
+                                    //        tankObject.Translate(facing.x, facing.y);
+                                    //    }
+                                    //}
+                                    //else
+                                    //{
+                                    //    Vector3 facing = new Vector3(
+                                    //  tankObject.LocalTransform.m00,
+                                    //  tankObject.LocalTransform.m01, 1) * deltaTime * 100;
+                                    //    tankObject.Translate(facing.x, facing.y);
+                                    //}
+                                    i3++;
+                                }
+
+                                if (end)
+                                {
+                                    int i4 = 0;
+                                    foreach (SceneObject treeObject in finList)
+                                    {
+                                        if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= finList[i3].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= finList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
+                                        {
+                                            if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= finList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= finList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                                            {
+                                                facing = new Vector3(
+                                             tankObject.LocalTransform.m00,
+                                             tankObject.LocalTransform.m01, 1) * deltaTime * -2000;
+                                                tankObject.Translate(facing.x, facing.y);
+
+                                                moveDelay = 1;//start move delay counter
+
+
+                                            }
+                                        }
+                                        i4++;
                                     }
                                 }
 
-                                //    else
-                                //    {
-                                //        Vector3 facing = new Vector3(
-                                // tankObject.LocalTransform.m00,
-                                // tankObject.LocalTransform.m01, 1) * deltaTime * 100;
-                                //        tankObject.Translate(facing.x, facing.y);
-                                //    }
-                                //}
-                                //else
-                                //{
-                                //    Vector3 facing = new Vector3(
-                                //  tankObject.LocalTransform.m00,
-                                //  tankObject.LocalTransform.m01, 1) * deltaTime * 100;
-                                //    tankObject.Translate(facing.x, facing.y);
-                                //}
-                                i3++;
                             }
-
+                            
+                            //stop the plaer leaving the sceen
                             if (tankSprite.GlobalTransform.m20 < 0 + (tankSprite.Height) || tankSprite.GlobalTransform.m20 > GetScreenWidth() - (tankSprite.Height))
                             {
                                 facing = new Vector3(
@@ -872,9 +896,26 @@ namespace SceneHierarchyTute
 
                                 moveDelay = 1;//start move delay counter
                             }
-                        }
 
+                            //stop the player running into the other tank
+                            if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 2.0f) >= eTankSprite.GlobalTransform.m20 - (eTankSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 2.0f) <= eTankSprite.GlobalTransform.m20 + (eTankSprite.Width / 2.0f))
+                            {
+                                if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 2.0f) >= eTankSprite.GlobalTransform.m21 - (eTankSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 2.0f) <= eTankObject.GlobalTransform.m21 + (eTankSprite.Height / 2.0f))
+                                {
+                                    facing = new Vector3(
+                                 tankObject.LocalTransform.m00,
+                                 tankObject.LocalTransform.m01, 1) * deltaTime * -2000;
+                                    tankObject.Translate(facing.x, facing.y);
+
+                                    moveDelay = 1;//start move delay counter
+
+
+                                }
+                            }
+
+                        }
                     }
+
                     if (IsKeyDown(KeyboardKey.KEY_S))
                     {
                         //stop the tank from moving if recently ran into wall
@@ -885,27 +926,56 @@ namespace SceneHierarchyTute
                             tankObject.LocalTransform.m01, 1) * deltaTime * -100;
                             tankObject.Translate(facing.x, facing.y);
 
-                            //cycle through the wall list to check if tank colides with wall
-                            int i3 = 0;
-                            foreach (SceneObject treeObject in wallList)
+
+                            if (!end)
                             {
-                                if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
+                                //cycle through the wall list to check if tank colides with wall
+                                int i3 = 0;
+                                foreach (SceneObject treeObject in wallList)
                                 {
-                                    if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                                    if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
                                     {
-                                        facing = new Vector3(
-                                     tankObject.LocalTransform.m00,
-                                     tankObject.LocalTransform.m01, 1) * deltaTime * 2000;
-                                        tankObject.Translate(facing.x, facing.y);
+                                        if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= wallList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= wallList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                                        {
+                                            facing = new Vector3(
+                                         tankObject.LocalTransform.m00,
+                                         tankObject.LocalTransform.m01, 1) * deltaTime * 2000;
+                                            tankObject.Translate(facing.x, facing.y);
 
-                                        moveDelay = 1;//start move delay counter
+                                            moveDelay = 1;//start move delay counter
 
 
+                                        }
                                     }
+                                    i3++;
                                 }
-                                i3++;
+
                             }
 
+                            if (end)
+                            {
+                                int i3 = 0;
+                                foreach (SceneObject treeObject in finList)
+                                {
+                                    if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 4.0f) >= finList[i3].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 4.0f) <= finList[i3].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
+                                    {
+                                        if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 4.0f) >= finList[i3].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 4.0f) <= finList[i3].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                                        {
+                                            facing = new Vector3(
+                                         tankObject.LocalTransform.m00,
+                                         tankObject.LocalTransform.m01, 1) * deltaTime * 2000;
+                                            tankObject.Translate(facing.x, facing.y);
+
+                                            moveDelay = 1;//start move delay counter
+
+
+                                        }
+                                    }
+                                    i3++;                                    
+                                }
+                            }
+
+                            //stop player from leabing screen
                             if (tankSprite.GlobalTransform.m20 < 0 + (tankSprite.Height / 4.0f) || tankSprite.GlobalTransform.m20 > GetScreenWidth() - (tankSprite.Height / 4.0f))
                             {
                                 facing = new Vector3(
@@ -925,8 +995,23 @@ namespace SceneHierarchyTute
 
                                 moveDelay = 1;//start move delay counter
                             }
-                        }
 
+                            //stop the player running into the other tank
+                            if (tankObject.GlobalTransform.m20 + (tankSprite.Width / 2.0f) >= eTankSprite.GlobalTransform.m20 - (eTankSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 - (tankSprite.Width / 2.0f) <= eTankSprite.GlobalTransform.m20 + (eTankSprite.Width / 2.0f))
+                            {
+                                if (tankObject.GlobalTransform.m21 + (tankSprite.Width / 2.0f) >= eTankSprite.GlobalTransform.m21 - (eTankSprite.Height / 2.0f) && tankObject.GlobalTransform.m21 - (tankSprite.Width / 2.0f) <= eTankObject.GlobalTransform.m21 + (eTankSprite.Height / 2.0f))
+                                {
+                                    facing = new Vector3(
+                                 tankObject.LocalTransform.m00,
+                                 tankObject.LocalTransform.m01, 1) * deltaTime * 2000;
+                                    tankObject.Translate(facing.x, facing.y);
+
+                                    moveDelay = 1;//start move delay counter
+
+
+                                }
+                            }
+                        }
                     }
 
                     //get user input to move the turret
@@ -953,14 +1038,10 @@ namespace SceneHierarchyTute
                         if (!shot)
                         {
                             Shoot();
-
-
-
                             shot = true;
                         }
-
                     }
-                }//movement
+                }
             }
 
             //call update on tank object
@@ -987,21 +1068,6 @@ namespace SceneHierarchyTute
 
                 //check if bullet has hit a wall
                 if (bulletSprite.GlobalTransform.m20 < 0 + (bulletSprite.Height / 2.0f) || bulletSprite.GlobalTransform.m20 > GetScreenWidth() - (bulletSprite.Height / 2.0f))
-                {    
-                    //load sounds
-                    Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
-                    //play sound
-                    PlaySound(ExplodeFX);
-
-                    smokeSprite.SetPosition(-smokeSprite.Width / 2.0f, -smokeSprite.Height / 2.0f);
-                    smokeObject.SetPosition(bulletSprite.GlobalTransform.m20, bulletSprite.GlobalTransform.m21);
-                    smokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
-                    //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
-                    smokeTimer = 1;
-                    shot = false;//set shot to false so gun can be fired again                  
-                }
-
-                if (bulletSprite.GlobalTransform.m21 < 0 + (bulletSprite.Width /2.0f) || bulletSprite.GlobalTransform.m21 > GetScreenHeight() - (bulletSprite.Height / 2.0f))
                 {
                     //load sounds
                     Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
@@ -1011,36 +1077,105 @@ namespace SceneHierarchyTute
                     smokeSprite.SetPosition(-smokeSprite.Width / 2.0f, -smokeSprite.Height / 2.0f);
                     smokeObject.SetPosition(bulletSprite.GlobalTransform.m20, bulletSprite.GlobalTransform.m21);
                     smokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
-                    //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                                                             //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                    smokeTimer = 1;
+                    shot = false;//set shot to false so gun can be fired again                  
+                }
+
+                if (bulletSprite.GlobalTransform.m21 < 0 + (bulletSprite.Width / 2.0f) || bulletSprite.GlobalTransform.m21 > GetScreenHeight() - (bulletSprite.Height / 2.0f))
+                {
+                    //load sounds
+                    Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
+                    //play sound
+                    PlaySound(ExplodeFX);
+
+                    smokeSprite.SetPosition(-smokeSprite.Width / 2.0f, -smokeSprite.Height / 2.0f);
+                    smokeObject.SetPosition(bulletSprite.GlobalTransform.m20, bulletSprite.GlobalTransform.m21);
+                    smokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
+                                                             //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
                     smokeTimer = 1;
                     shot = false;//set shot to false so gun can be fired again
                 }
 
-                int i = 0;
-                foreach (SceneObject treeObject in wallList)
-                {                    
-                    if (bulletSprite.GlobalTransform.m20 >= wallList[i].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && bulletSprite.GlobalTransform.m20 <= wallList[i].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
+                if (!end)
+                {
+                    int i = 0;
+                    foreach (SceneObject treeObject in wallList)
                     {
-                        if (bulletSprite.GlobalTransform.m21 >= wallList[i].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && bulletSprite.GlobalTransform.m21 <= wallList[i].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                        if (bulletSprite.GlobalTransform.m20 >= wallList[i].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && bulletSprite.GlobalTransform.m20 <= wallList[i].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
                         {
-                            //load sounds
-                            Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
-                            //play sound
-                            PlaySound(ExplodeFX);
+                            if (bulletSprite.GlobalTransform.m21 >= wallList[i].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && bulletSprite.GlobalTransform.m21 <= wallList[i].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                            {
+                                //load sounds
+                                Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
+                                //play sound
+                                PlaySound(ExplodeFX);
 
-                            smokeSprite.SetPosition(-smokeSprite.Width / 2.0f, -smokeSprite.Height / 2.0f);
-                            smokeObject.SetPosition(bulletSprite.GlobalTransform.m20, bulletSprite.GlobalTransform.m21);
-                            smokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
-                            //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
-                            smokeTimer = 1;
-                            shot = false;//set shot to false so gun can be fired again
+                                smokeSprite.SetPosition(-smokeSprite.Width / 2.0f, -smokeSprite.Height / 2.0f);
+                                smokeObject.SetPosition(bulletSprite.GlobalTransform.m20, bulletSprite.GlobalTransform.m21);
+                                smokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
 
-                            wallList[i].SetPosition(-1000, -1000);
-                            //treeObject.SetPosition(-1000, -1000);
+                                smokeTimer = 1;
+                                shot = false;//set shot to false so gun can be fired again
+
+                                wallList[i].SetPosition(-1000, -1000);
+                            }
+
                         }
-
+                        i++;
                     }
-                    i++;
+                }
+
+                if (end)
+                {
+                    int i = 0;
+                    foreach (SceneObject treeObject in finList)
+                    {
+                        if (bulletSprite.GlobalTransform.m20 >= finList[i].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && bulletSprite.GlobalTransform.m20 <= finList[i].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
+                        {
+                            if (bulletSprite.GlobalTransform.m21 >= finList[i].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && bulletSprite.GlobalTransform.m21 <= finList[i].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                            {
+                                //load sounds
+                                Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
+                                //play sound
+                                PlaySound(ExplodeFX);
+
+                                smokeSprite.SetPosition(-smokeSprite.Width / 2.0f, -smokeSprite.Height / 2.0f);
+                                smokeObject.SetPosition(bulletSprite.GlobalTransform.m20, bulletSprite.GlobalTransform.m21);
+                                smokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
+
+                                smokeTimer = 1;
+                                shot = false;//set shot to false so gun can be fired again
+
+                                finList[i].SetPosition(-1000, -1000);
+                            }
+
+                        }
+                        i++;
+                    }
+                }
+
+                if (bulletSprite.GlobalTransform.m20 >= eTankSprite.GlobalTransform.m20 - (eTankSprite.Width / 2.0f) && bulletSprite.GlobalTransform.m20 <= eTankSprite.GlobalTransform.m20 + (eTankSprite.Width / 2.0f))
+                {
+                    if (bulletSprite.GlobalTransform.m21 >= eTankSprite.GlobalTransform.m21 - (eTankSprite.Height / 2.0f) && bulletSprite.GlobalTransform.m21 <= eTankSprite.GlobalTransform.m21 + (eTankSprite.Height / 2.0f))
+                    {
+                        //load sounds
+                        Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
+                        //play sound
+                        PlaySound(ExplodeFX);
+
+                        smokeSprite.SetPosition(-smokeSprite.Width / 2.0f, -smokeSprite.Height / 2.0f);
+                        smokeObject.SetPosition(bulletSprite.GlobalTransform.m20, bulletSprite.GlobalTransform.m21);
+                        smokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
+                                                                 //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                        smokeTimer = 1;
+
+                        eTankObject.SetPosition(-1000, -1000);
+
+                        eIsDead = true;
+                        shot = false;
+                    }
+
                 }
 
                 //    if (bulletSprite.GlobalTransform.m20 >= treeSprite.GlobalTransform.m20  && bulletSprite.GlobalTransform.m20 <= treeSprite.GlobalTransform.m20 + (treeSprite.Width))
@@ -1082,7 +1217,7 @@ namespace SceneHierarchyTute
                     eSmokeSprite.SetPosition(-eSmokeSprite.Width / 2.0f, -eSmokeSprite.Height / 2.0f);
                     eSmokeObject.SetPosition(eBulletSprite.GlobalTransform.m20, eBulletSprite.GlobalTransform.m21);
                     eSmokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
-                    //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                                                              //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
                     eSmokeTimer = 1;
                     eShot = false;//set shot to false so gun can be fired again                  
                 }
@@ -1097,17 +1232,17 @@ namespace SceneHierarchyTute
                     eSmokeSprite.SetPosition(-eSmokeSprite.Width / 2.0f, -eSmokeSprite.Height / 2.0f);
                     eSmokeObject.SetPosition(eBulletSprite.GlobalTransform.m20, eBulletSprite.GlobalTransform.m21);
                     eSmokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
-                    //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                                                              //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
                     eSmokeTimer = 1;
                     eShot = false;//set shot to false so gun can be fired again
                 }
 
                 int i = 0;
-                foreach (SceneObject treeObject in wallList)
+                foreach (SceneObject treeObject in finList)
                 {
-                    if (eBulletSprite.GlobalTransform.m20 >= wallList[i].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && eBulletSprite.GlobalTransform.m20 <= wallList[i].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
+                    if (eBulletSprite.GlobalTransform.m20 >= finList[i].GlobalTransform.m20 - (treeSprite.Width / 2.0f) && eBulletSprite.GlobalTransform.m20 <= finList[i].GlobalTransform.m20 + (treeSprite.Width / 2.0f))
                     {
-                        if (eBulletSprite.GlobalTransform.m21 >= wallList[i].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && eBulletSprite.GlobalTransform.m21 <= wallList[i].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
+                        if (eBulletSprite.GlobalTransform.m21 >= finList[i].GlobalTransform.m21 - (treeSprite.Height / 2.0f) && eBulletSprite.GlobalTransform.m21 <= finList[i].GlobalTransform.m21 + (treeSprite.Height / 2.0f))
                         {
                             //load sounds
                             Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
@@ -1117,109 +1252,104 @@ namespace SceneHierarchyTute
                             eSmokeSprite.SetPosition(-eSmokeSprite.Width / 2.0f, -eSmokeSprite.Height / 2.0f);
                             eSmokeObject.SetPosition(eBulletSprite.GlobalTransform.m20, eBulletSprite.GlobalTransform.m21);
                             eSmokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
-                            //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                                                                      //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
                             eSmokeTimer = 1;
                             eShot = false;//set shot to false so gun can be fired again
 
-                            wallList[i].SetPosition(-1000, -1000);
+                            finList[i].SetPosition(-1000, -1000);
                             //treeObject.SetPosition(-1000, -1000);
                         }
 
                     }
                     i++;
                 }
+
+                if (eBulletSprite.GlobalTransform.m20 >= tankSprite.GlobalTransform.m20 - (tankSprite.Width / 2.0f) && eBulletSprite.GlobalTransform.m20 <= tankSprite.GlobalTransform.m20 + (tankSprite.Width / 2.0f))
+                {
+                    if (eBulletSprite.GlobalTransform.m21 >= tankSprite.GlobalTransform.m21 - (tankSprite.Height / 2.0f) && eBulletSprite.GlobalTransform.m21 <= tankSprite.GlobalTransform.m21 + (tankSprite.Height / 2.0f))
+                    {
+                        //load sounds
+                        Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
+                        //play sound
+                        PlaySound(ExplodeFX);
+
+                        eSmokeSprite.SetPosition(-eSmokeSprite.Width / 2.0f, -eSmokeSprite.Height / 2.0f);
+                        eSmokeObject.SetPosition(eBulletSprite.GlobalTransform.m20, eBulletSprite.GlobalTransform.m21);
+                        eSmokeSprite.Load(@"data\smokeGrey4.png");//change bullet to smoke
+                                                                  //bulletSprite.Load(@"data\smokeGrey4.png");//change bullet to smokea
+                        eSmokeTimer = 1;
+                        eShot = false;//set shot to false so gun can be fired again
+
+                        tankObject.SetPosition(-1000, -1000);
+
+                        isDead = true;
+
+                    }
+
+                }
+
             }
 
             //lastTime = currentTime;
 
             //check if tank has made it to the end
-            if (tankObject.GlobalTransform.m20  > endObject.GlobalTransform.m20 - (endSprite.Width / 2.0f) && tankObject.GlobalTransform.m20  < endObject.GlobalTransform.m20 + (endSprite.Width / 2.0f)) 
+            if (tankObject.GlobalTransform.m20 > endObject.GlobalTransform.m20 - (endSprite.Width / 2.0f) && tankObject.GlobalTransform.m20 < endObject.GlobalTransform.m20 + (endSprite.Width / 2.0f))
             {
-                if (tankObject.GlobalTransform.m21  > endObject.GlobalTransform.m21 - (endSprite.Width / 2.0f) && tankObject.GlobalTransform.m21 < endObject.GlobalTransform.m21 + (endSprite.Width / 2.0f))
+                if (tankObject.GlobalTransform.m21 > endObject.GlobalTransform.m21 - (endSprite.Width / 2.0f) && tankObject.GlobalTransform.m21 < endObject.GlobalTransform.m21 + (endSprite.Width / 2.0f))
                 {
                     end = true;
                 }
             }
 
-            /////////////////////////////////////////////////////////////////////////
-            ////////Rotate enemy tank to face player
-            //////////////////////////////////////////////////////////////////////////
-            {
-                ///rotate the enemy tank to face the player
-                float angleTo = eTankObject.GetAngleTowards(tankObject.GlobalTransform);
-                //eTankObject.Rotate(angleTo);
-                if (angleTo > 0)
-                {
-                    eTankObject.Rotate(deltaTime);
-                }
-                if (angleTo < 0)
-                {
-                    eTankObject.Rotate(-deltaTime);
-                }
-                if (angleTo > -0.5 && angleTo < 0.5 && eShot == false)
-                {
-                    EnemyShoot();
-                    eShot = true;
-                }
 
-                //eTankObject.RotateTowards(tankObject.GlobalTransform, deltaTime);
+            if (end)
+            {
+               
+                
+
+                /////////////////////////////////////////////////////////////////////////
+                ////////Rotate enemy tank to face player
+                //////////////////////////////////////////////////////////////////////////
+                {
+                    ///rotate the enemy tank to face the player
+                    float angleTo = eTankObject.GetAngleTowards(tankObject.GlobalTransform);
+                    //eTankObject.Rotate(angleTo);
+                    if (angleTo > 0)
+                    {
+                        eTankObject.Rotate(deltaTime);
+                    }
+                    if (angleTo < 0)
+                    {
+                        eTankObject.Rotate(-deltaTime);
+                    }
+                    if (angleTo > -0.5 && angleTo < 0.5 && eShot == false && !isDead && !eIsDead)
+                    {
+                        EnemyShoot();
+                        eShot = true;
+                    }
+
+                    //eTankObject.RotateTowards(tankObject.GlobalTransform, deltaTime);
+                }
             }
+           
         }
+
 
         public void Draw()
         {
             BeginDrawing();
 
             ClearBackground(Color.BLACK);
-            
+
 
             if (!end)
             {
-                
+
                 //call to draw the tank object
                 tankObject.Draw();
 
                 //draw the endObject
-                endObject.Draw();
-
-                eTankObject.Draw();
-                
-                
-
-                //check if shot has been fired
-                if (shot)
-                {
-                    //draw bullet
-                    bulletObject.Draw();
-                }
-
-                if (smokeTimer > 0)
-                {
-                    smokeTimer++;
-                    smokeObject.Draw();
-
-                    if (smokeTimer > 60)
-                    {
-                        smokeTimer = 0;
-                    }
-                }
-
-                if(eShot)
-                {
-                    eBulletObject.Draw();
-                }
-
-                if (eSmokeTimer > 0)
-                {
-                    eSmokeTimer++;
-                    eSmokeObject.Draw();
-
-                    if (eSmokeTimer > 60)
-                    {
-                        eSmokeTimer = 0;
-                    }
-                }
-
+                endObject.Draw();                
 
                 int i2 = 0;
                 //draw tree walls
@@ -1234,6 +1364,40 @@ namespace SceneHierarchyTute
                     i2++;
                 }
             }
+
+            //check if shot has been fired
+            if (shot)
+            {
+                //draw bullet
+                bulletObject.Draw();
+            }
+
+            if (smokeTimer > 0)
+            {
+                smokeTimer++;
+                smokeObject.Draw();
+
+                if (smokeTimer > 60)
+                {
+                    smokeTimer = 0;
+                }
+            }
+
+            if (eShot)
+            {
+                eBulletObject.Draw();
+            }
+
+            if (eSmokeTimer > 0)
+            {
+                eSmokeTimer++;
+                eSmokeObject.Draw();
+
+                if (eSmokeTimer > 60)
+                {
+                    eSmokeTimer = 0;
+                }
+            }        
 
             if (end)
             {
