@@ -1378,9 +1378,9 @@ namespace SceneHierarchyTute
                     i++;
                 }
 
-                if (eBulletSprite.GlobalTransform.m20 >= tankSprite.GlobalTransform.m20 - (tankSprite.Width / 2.0f) && eBulletSprite.GlobalTransform.m20 <= tankSprite.GlobalTransform.m20 + (tankSprite.Width / 2.0f))
+                if (eBulletSprite.GlobalTransform.m20 > tankSprite.GlobalTransform.m20 - (tankSprite.Width) && eBulletSprite.GlobalTransform.m20 < tankSprite.GlobalTransform.m20 + (tankSprite.Width / 6.0f))
                 {
-                    if (eBulletSprite.GlobalTransform.m21 >= tankSprite.GlobalTransform.m21 - (tankSprite.Height / 2.0f) && eBulletSprite.GlobalTransform.m21 <= tankSprite.GlobalTransform.m21 + (tankSprite.Height / 2.0f))
+                    if (eBulletSprite.GlobalTransform.m21 > tankSprite.GlobalTransform.m21 - (tankSprite.Height ) && eBulletSprite.GlobalTransform.m21 < tankSprite.GlobalTransform.m21 + (tankSprite.Height / 6.0f))
                     {
                         //load sounds
                         Sound ExplodeFX = LoadSound(@"data\mixkit-arcade-game-explosion-2759.wav");
