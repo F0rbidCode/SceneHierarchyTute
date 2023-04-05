@@ -1485,7 +1485,8 @@ namespace SceneHierarchyTute
 
             ClearBackground(Color.BLACK);
 
-            tankAABB.debugBox(Color.RED);
+            //used for debugging collisions
+            //tankAABB.debugBox(Color.RED);
 
             if (!end)
             {
