@@ -1166,20 +1166,26 @@ namespace SceneHierarchyTute
             //////FIT OABB
             /////////////////////////////////////////////////////////////////
             {
-                Vector3[] point = new Vector3[4];
-                Vector3 p0 = new Vector3(tankObject.GlobalTransform.m20 - (tankSprite.Height / 2), tankSprite.GlobalTransform.m21, 1);
-                point[0] = p0;
+                //Vector3[] point = new Vector3[4];
+                //Vector3 p0 = new Vector3(tankObject.GlobalTransform.m20 - (tankSprite.Height / 2) - 10, tankSprite.GlobalTransform.m21 - (tankSprite.Height / 2) - 10, 0);
+                //point[0] = p0;
 
-                Vector3 p1 = new Vector3(tankSprite.GlobalTransform.m20 + (tankSprite.Height / 2), tankSprite.GlobalTransform.m21, 1);
-                point[1] = p1;
+                //Vector3 p1 = new Vector3(tankSprite.GlobalTransform.m20 + (tankSprite.Height / 2), tankSprite.GlobalTransform.m21, 1);
+                //point[1] = p1;
 
-                Vector3 p2 = new Vector3 (tankSprite.GlobalTransform.m20, tankSprite.GlobalTransform.m21 - (tankSprite.Width / 2), 1);
-                point[2] = p2;
+                //Vector3 p2 = new Vector3(tankSprite.GlobalTransform.m20, tankSprite.GlobalTransform.m21 - (tankSprite.Width / 2), 1);
+                //point[2] = p2;
 
-                Vector3 p3 = new Vector3(tankSprite.GlobalTransform.m20, tankSprite.GlobalTransform.m21 + (tankSprite.Width / 2), 1);
-                point[3]= p3;
+                //Vector3 p3 = new Vector3(tankSprite.GlobalTransform.m20, tankSprite.GlobalTransform.m21 + (tankSprite.Width / 2), 1);
+                //point[3] = p3;
 
-                tankOABB.Fit(point);
+                //tankOABB.Fit(point);
+
+                tankOABB.Fit(
+                    new Vector3(tankObject.GlobalTransform.m20 - (tankSprite.Width / 2), tankObject.GlobalTransform.m21 - (tankSprite.Height / 2), 0), 
+                    new Vector3(tankObject.GlobalTransform.m20 + (tankSprite.Width / 2), tankObject.GlobalTransform.m21 + (tankSprite.Height / 2), 0)
+                    );
+
             }
 
             ////call update on tree walls
@@ -1479,6 +1485,7 @@ namespace SceneHierarchyTute
 
             ClearBackground(Color.BLACK);
 
+            tankOABB.debugBox(Color.RED);
 
             if (!end)
             {

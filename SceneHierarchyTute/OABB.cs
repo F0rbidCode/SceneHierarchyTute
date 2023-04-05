@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Raylib_cs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Raylib_cs.Raylib;
 
 
 namespace SceneHierarchyTute
@@ -54,6 +56,12 @@ namespace SceneHierarchyTute
             return corners;
         }
 
+        public void Fit(Vector3 min, Vector3 max)
+        {
+            this.min = min;
+            this.max = max;
+        }
+
 
         //fit the OABB around given points
         public void Fit(Vector3[] points)
@@ -78,6 +86,13 @@ namespace SceneHierarchyTute
         {
             //test for not overlapped as it is faster
             return !(p.x < min.x || p.y < min.y || p.x > max.x || p.y > max.y);
+        }
+
+
+       //create a function to draw collision box on screen for debugging
+       public void debugBox(Color c)
+        {
+            DrawRectangle((int)min.x, (int)min.y, (int)max.x - (int)min.x, (int)max.y - (int)min.y, c);
         }
     }
 }
