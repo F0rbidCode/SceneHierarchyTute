@@ -9,7 +9,7 @@ using static Raylib_cs.Raylib;
 
 namespace SceneHierarchyTute
 {
-    internal class OABB : SceneObject
+    internal class AABB
     {
         Vector3 min = new Vector3(float.NegativeInfinity,
                                   float.NegativeInfinity,
@@ -20,12 +20,12 @@ namespace SceneHierarchyTute
                                   float.PositiveInfinity,
                                   float.PositiveInfinity);
 
-        public OABB()
+        public AABB()
         {
 
         }
 
-        public OABB(Vector3 min, Vector3 max)
+        public AABB(Vector3 min, Vector3 max)
         {
             this.min = min;
             this.max = max;
