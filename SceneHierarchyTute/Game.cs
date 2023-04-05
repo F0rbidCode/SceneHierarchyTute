@@ -1166,9 +1166,9 @@ namespace SceneHierarchyTute
             //////FIT OABB
             /////////////////////////////////////////////////////////////////
             {
-                //Vector3[] point = new Vector3[4];
-                //Vector3 p0 = new Vector3(tankObject.GlobalTransform.m20 - (tankSprite.Height / 2) - 10, tankSprite.GlobalTransform.m21 - (tankSprite.Height / 2) - 10, 0);
-                //point[0] = p0;
+                Vector3[] point = new Vector3[4];
+                Vector3 p0 = new Vector3(tankObject.GlobalTransform.m20 - (tankSprite.Height / 2), tankSprite.GlobalTransform.m21, 1);
+                point[0] = p0;
 
                 //Vector3 p1 = new Vector3(tankSprite.GlobalTransform.m20 + (tankSprite.Height / 2), tankSprite.GlobalTransform.m21, 1);
                 //point[1] = p1;
